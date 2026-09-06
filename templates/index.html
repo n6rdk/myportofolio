@@ -6,55 +6,175 @@
     <title>Nabila - Portfolio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        background: "#071122",
+                        surface: "#121E3A",
+                        ink: "#E6F1FF",
+                        muted: "#6B7A8F",
+                        primary: "#7DD987",
+                        accent1: "#335682",
+                        accent2: "#CC6B91" 
+                    },
+                    fontFamily: {
+                        mono: ['JetBrains Mono', 'monospace'],
+                        sans: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body>
-    <header class="site-header">
-        <div class="container">
-            <a href="#profile" class="brand">Nabila</a>
-            <nav>
-                <a href="#profile">Profile</a>
+
+<body class="bg-background antialiased min-h-screen flex flex-col justify-between selection:bg-primary selection:text-background">
+    <header class="sticky top-0 z-50 w-full bg-background/90 backdrop-blur-md border-b border-muted/15 font-mono text-ink">
+        <div class="max-w-5xl mx-auto flex justify-between items-center py-4 px-5 md:py-5 md:px-5 text-xs md:text-base">
+            <a href="#about" class="text-primary">~/Nabila</a>
+            <nav class="flex gap-3">
+                <a href="#about" class="font-mono text-muted">/<span class="hover:text-primary active:brightness-90">about</span></a>
+                <a href="#skills" class="font-mono text-muted">/<span class="hover:text-primary active:brightness-90">skills</span></a>
+                <a href="#contact" class="font-mono text-muted">/<span class="hover:text-primary active:brightness-90">contact</span></a>
             </nav>
         </div>
     </header>
 
     <main>
-        <section class="hero" id="profile">
-            <div class="container hero-grid">
-                <div class="hero-identity">
-                    <p class="hero-kicker">Computer Science &middot; Universitas Indonesia</p>
-                    <h1>Nabila Oktavia Ramadhani</h1>
+        <section id="about">
+            <div class="max-w-5xl mx-auto px-7 py-7 md:px-5 grid grid-cols-1 flex-col md:grid-cols-[1.3fr_1fr] [grid-template-areas:'identity'_'photo'_'details'] md:[grid-template-areas:'identity_photo'_'details_photo'] gap-y-6 gap-x-12 items-center w-full">
+                <div class="[grid-area:identity] font-mono">
+                    <p class="text-[0.85rem] tracking-[0.08em] text-accent1 mb-3">> whoami</p>
+                    <h1 class="text-[clamp(3rem,7vw,5rem)] leading-[0.95] font-bold uppercase text-ink">
+                        <span class="text-primary drop-shadow-[0_0_5px_theme(colors.primary)]">Nabila</span>
+                        <br>Oktavia
+                        <br>Ramadhani
+                    </h1>
                 </div>
-                <div class="hero-photo">
-                    <div class="photo-block"></div>
-                    <img class="avatar" src="/static/img/self.png" alt="Photo of Nabila">
+                <div class="[grid-area:photo] justify-self-center md:justify-self-end w-full md:max-w-[340px] max-w-[240px]">
+                    <div class="max-w-xs bg-surface backdrop-blur-md border border-muted rounded-md p-2 shadow-xl">
+                        <img class="relative z-10 block w-full aspect-[3/4] object-cover rounded-md" src="/static/img/self.png" alt="Photo of Nabila">
+                        <div class="flex font-mono text-muted text-xs px-1 pt-1">~/avatar.png</div>
+                    </div>
                 </div>
-                <div class="hero-details">
-                    <p class="bio">CS student at Universitas Indonesia, currently exploring my interests in cybersecurity and data. I'm a quiet thinker who prefers observing, analyzing, and solving problems behind the scenes.</p>
-                    <dl class="meta-list">
-                        <div class="meta-row">
-                            <dt>NPM</dt>
-                            <dd>2506593613</dd>
+                <div class="[grid-area:details] hero-details space-y-6">
+                    <p class="text-base md:text-lg font-sans text-ink leading-relaxed">
+                        CS student at Universitas Indonesia, currently exploring my interests in data science and cybersecurity. I'm a quiet thinker who prefers observing, analyzing, and solving problems behind the scenes.</p>
+                    <div class="font-mono">
+                        <a href="#contact" class="btn">
+                            <iconify-icon icon="lucide:message-square"></iconify-icon>
+                            <span>GET IN TOUCH</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills" class="py-16 md:scroll-mt-14">
+            <div class="max-w-5xl mx-auto px-5 font-mono text-muted">
+                <h2 class="mb-10 drop-shadow-[0_0_5px_theme(colors.primary)]">
+                    ~/<span class="text-primary text-lg font-bold">skills</span>
+                </h2>
+                <div class="divide-y divide-muted border-y border-muted">
+                    <div class="grid gap-4 py-6 md:grid-template-areas['tech'_'stacks'] md:grid-cols-[1fr_2.5fr] md:items-start">
+                        <div class="md:[grid-area:'tech'] flex items-center gap-2.5">
+                            <iconify-icon icon="lucide:code" class="w-6 h-6 text-primary text-2xl"></iconify-icon>
+                            <p class="text-ink">Languages</p>
                         </div>
-                        <div class="meta-row">
-                            <dt>Program</dt>
-                            <dd>S1 Ilmu Komputer</dd>
+                        <div class="md:[grid-area:'stacks'] flex flex-wrap gap-2">
+                            <span class="tag">Java</span>
+                            <span class="tag">Python</span>
+                            <span class="tag">C/C++</span>
+                            <span class="tag">JavaScript</span>
+                            <span class="tag">Bash</span>
+                            <span class="tag">SQL</span>
                         </div>
-                    </dl>
-                    <div class="social-links">
-                        <a href="https://github.com/n6rdk" class="social-link">GitHub</a>
-                        <a href="https://www.linkedin.com/in/nabila-oktavia-ramadhani-b28544333/" class="social-link">LinkedIn</a>
-                        <a href="mailto:nabilaoktavia1975@gmail.com" class="social-link">Email</a>
+                    </div>
+                    <div class="grid gap-4 py-6 md:grid-template-areas['tech'_'stacks'] md:grid-cols-[1fr_2.5fr] md:items-start">
+                        <div class="md:[grid-area:'tech'] flex items-center gap-2.5">
+                            <iconify-icon icon="lucide:chart-no-axes-combined" class="w-6 h-6 text-primary text-2xl"></iconify-icon>
+                            <p class="text-ink">Data Science</p>
+                        </div>
+                        <div class="md:[grid-area:'stacks'] flex flex-wrap gap-2">
+                            <span class="tag">NumPy</span>
+                            <span class="tag">Pandas</span>
+                            <span class="tag">Matplotlib</span>
+                            <span class="tag">Seaborn</span>
+                            <span class="tag">Scikit-learn</span>
+                        </div>
+                    </div>
+                    <div class="grid gap-4 py-6 md:grid-template-areas['tech'_'stacks'] md:grid-cols-[1fr_2.5fr] md:items-start">
+                        <div class="md:[grid-area:'tech'] flex items-center gap-2.5">
+                            <iconify-icon icon="lucide:bug" class="w-6 h-6 text-primary text-2xl"></iconify-icon>
+                            <p class="text-ink">Cybersecurity</p>
+                        </div>
+                        <div class="md:[grid-area:'stacks'] flex flex-wrap gap-2">
+                            <span class="tag">Linux CLI</span>
+                            <span class="tag">Wireshark</span>
+                            <span class="tag">Nmap</span>
+                            <span class="tag">Networking</span>
+                            <span class="tag">Cryptography</span>
+                            <span class="tag">Forensics</span>
+                            <span class="tag">OSINT</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="py-16 md:scroll-mt-14">
+            <div class="max-w-5xl mx-auto px-5 font-mono text-muted">
+                <h2 class="mb-5 drop-shadow-[0_0_5px_theme(colors.primary)]">
+                    ~/<span class="text-primary text-lg font-bold">contact</span>
+                </h2>
+
+                <div class="grid gap-6 py-6 md:grid-cols-[1fr_auto_1fr] md:[grid-template-areas:'text_line_contact'] items-center">
+                    <div class="md:[grid-area:text] flex flex-col justify-center">
+                        <h1 class="font-mono text-2xl md:text-4xl font-bold uppercase text-ink">
+                            LET'S <span class="text-primary">CONNECT</span>
+                        </h1>
+                        <p class="font-sans text-muted text mt-1">Feel free to reach out.</p>
+                    </div>
+                    <div class="md:[grid-area:line] hidden md:block w-[1px] h-20 bg-muted"></div>
+                    <div class="md:[grid-area:contact] flex flex-col justify-start items-start text-xs md:text-sm md:p-5 gap-2">
+                        <a href="mailto:nabilaoktavia1975@gmail.com" class="flex items-center gap-2 text-ink hover:text-primary">
+                            <iconify-icon icon="lucide:mail" class="text-xl text-primary shrink-0"></iconify-icon>
+                            <span>nabilaoktavia1975@gmail.com</span>
+                        </a>
+                        <a href="https://www.linkedin.com/in/nabila-oktavia-ramadhani-b28544333/" class="flex items-center gap-2 text-ink hover:text-primary">
+                            <iconify-icon icon="lucide:linkedin" class="text-xl text-primary shrink-0"></iconify-icon>
+                            <span>linkedin.com/in/nabila-oktavia-ramadhani</span>
+                        </a>
+                        <a href="https://github.com/n6rdk" class="flex items-center gap-2 text-ink hover:text-primary">
+                            <iconify-icon icon="lucide:github" class="text-xl text-primary shrink-0"></iconify-icon>
+                            <span>github.com/n6rdk</span>
+                        </a>
                     </div>
                 </div>
             </div>
         </section>
     </main>
 
-    <footer class="site-footer">
-        <div class="container">
-            <p>&copy; 2026 Nabila. Fakultas Ilmu Komputer, Universitas Indonesia.</p>
+    <footer class="w-full border-t border-muted/15 bg-background py-8 font-mono text-xs text-muted">
+        <div class="max-w-5xl mx-auto px-5 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex flex-col md:flex-row items-center gap-1 md:gap-2 text-center md:text-left">
+                <span class="text-ink font-semibold">&copy; 2026 Nabila Oktavia Ramadhani</span>
+                <span class="hidden md:inline text-muted/40">•</span>
+                <span>Fakultas Ilmu Komputer, Universitas Indonesia</span>
+            </div>
+
+            <div class="flex items-center gap-2 bg-surface px-3 py-1.5 rounded border border-muted/20 text-[11px]">
+                <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded bg-primary opacity-75"></span>
+                    <span class="relative inline-flex rounded h-2 w-2 bg-primary"></span>
+                </span>
+                <span class="text-ink">Built with patience</span>
+            </div>
         </div>
     </footer>
 </body>
