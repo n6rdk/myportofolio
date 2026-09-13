@@ -38,7 +38,7 @@
             {% if skill_list %}
             <p>A running list of tools I'm learning and leveling up.</p>
             {% endif %}
-            <div class="mt-10 mb-10 flex flex-col divide-y divide-muted border-y border-muted">
+            <div class="mt-10 mb-10 flex flex-col divide-y divide-muted {% if skill_list %}border-y border-muted{% endif %}">
                 {% for skill in skill_list %}
                 <div class="grid gap-4 py-6 md:grid-template-areas['tech'_'stacks'] md:grid-cols-[1fr_2.5fr] md:items-start">
                     <div class="md:[grid-area:'tech'] flex items-center gap-2.5">
