@@ -1,0 +1,217 @@
+@import "tailwindcss";
+
+@theme {
+    --color-ink: #E6F1FF;
+    --color-bg: #071122;
+    --color-primary: #7DD987;
+    --color-accent1: #335682;
+    --color-accent2: #CC6B91;
+    --color-muted: #6B7A8F;
+    --color-surface: #121E3A;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: transparent ;
+    border: 1px solid var(--color-primary) ;
+    color: var(--color-ink) ;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 0.875rem;
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.125rem;
+    transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: var(--color-primary) ;
+    color: var(--bg) ;
+    box-shadow: 0 0 15px var(--color-primary) ;
+}
+
+.btn:active {
+    filter: brightness(0.9);
+    transform: scale(0.95);
+}
+
+.btn iconify-icon {
+    font-size: 1.125rem;
+    flex-shrink: 0;
+    color: var(--color-ink) ;
+    transition: color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn:hover iconify-icon {
+    color: var(--color-bg) ;
+}
+
+.tag {
+    background-color: var(--color-surface) ;
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--color-muted) ;
+    color: var(--color-muted) ;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.125rem;
+    transition: color 200ms ease, border-color 200ms ease;
+    display: inline-block;
+}
+
+.tag:hover {
+    border-color: var(--color-primary) ;
+    color: var(--color-primary) ;
+}
+
+.typing-text {
+    --duration: 0.75s;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    line-height: 1.2;
+    border-right: 2px solid var(--color-accent1);
+    width: 0;
+    animation:
+        typing var(--duration) steps(var(--chars), end) forwards,
+        blink-cursor var(--duration) step-end forwards;
+}
+
+@keyframes typing {
+    from { width: 0; }
+    to { width: calc(var(--chars) * 1ch); }
+}
+
+@keyframes blink-cursor {
+    0%, 40%, 80% { border-color: var(--color-accent1); }
+    20%, 60% { border-color: transparent; }
+    100% { border-color: transparent; }
+}
+
+.neon-flicker {
+    animation: neon-flicker 3s infinite;
+}
+
+.neon-blink {
+    animation: neon-blink 3s infinite;
+}
+
+@keyframes neon-flicker {
+    0%, 9%, 13%, 15%, 34%, 36% {
+        opacity: 1;
+    }
+    10%, 12%, 14%, 35% {
+        opacity: 0.8;
+    }
+}
+
+@keyframes neon-blink {
+    0%, 40%, 80% {
+        opacity: 1;
+    }
+    20%, 60%, 100% {
+        opacity: 0.6;
+    }
+}
+
+.exp-card {
+    width: 100%;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-muted);
+    border-radius: 0.25rem;
+    padding: 1.25rem;
+    padding-left: 2.5rem;
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-areas: 'header' 'time' 'description';
+    row-gap: 0.25rem;
+    align-items: start;
+    transition: border-color 200ms ease, filter 200ms ease;
+}
+
+.exp-card:hover,
+.exp-card:active {
+    border-color: var(--color-primary);
+    filter: drop-shadow(0 0 5px var(--color-primary));
+}
+
+/* line decoration */
+.exp-card::before {
+    content: '';
+    position: absolute;
+    left: 1.25rem;
+    top: 1.25rem;
+    bottom: 1.25rem;
+    width: 1px;
+    z-index: 10;
+    background: linear-gradient(to bottom, var(--color-muted), transparent);
+    transition: background 200ms ease;
+}
+
+.exp-card:hover::before,
+.exp-card:active::before {
+    background: linear-gradient(to bottom, var(--color-primary), transparent);
+}
+
+/* dot decoration */
+.exp-card::after {
+    content: '';
+    position: absolute;
+    left: 1.0625rem;
+    top: 1rem;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 9999px;
+    z-index: 10;
+    background-color: var(--color-muted);
+    transition: background-color 200ms ease, box-shadow 200ms ease;
+}
+
+.exp-card:hover::after,
+.exp-card:active::after {
+    background-color: var(--color-primary);
+    box-shadow: 0 0 6px var(--color-primary);
+}
+
+.exp-header {
+    grid-area: header;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+}
+
+.exp-title {
+    font-weight: 700;
+    font-size: 1.125rem;
+    transition: color 200ms ease;
+}
+
+.exp-card:hover .exp-title,
+.exp-card:active .exp-title {
+    color: var(--color-primary);
+}
+
+.exp-category {
+    color: var(--color-primary);
+    font-size: 0.875rem;
+    flex-shrink: 0;
+}
+
+.exp-time {
+    grid-area: time;
+    font-size: 0.875rem;
+    color: var(--color-accent2);
+}
+
+.exp-description {
+    grid-area: description;
+    color: rgb(230 241 255 / 0.8);
+    font-size: 0.875rem;
+}

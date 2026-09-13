@@ -6,6 +6,10 @@ __pycache__/
 db.sqlite3
 media
 
+# Node / Tailwind
+node_modules/
+npm-debug.log*
+
 # Backup files
 *.bak
 
