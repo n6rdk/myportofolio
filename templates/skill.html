@@ -30,36 +30,34 @@
     </header>
 
     <main class="max-w-5xl mx-auto w-full px-7 py-7 md:px-5">
-        <section id="experience" class="font-mono text-ink">
+        <section id="skill" class="font-mono text-ink">
             <h2 class="mb-10 drop-shadow-[0_0_5px_var(--color-primary)]">
-                ~/<span class="text-primary text-lg font-bold neon-blink">experience</span>
+                ~/<span class="text-primary text-lg font-bold neon-blink">skill</span>
             </h2>
-            <p class="typing-text text-accent1" style="--chars:22">$ cat experiences.log</p>
-            {% if experience_list %}
-            <p>My experiences so far.</p>
+            <p class="typing-text wrap-mobile text-accent1" style="--chars:70">$ ls *.json | xargs cat | jq -s 'add' > skills.json && cat skills.json</p>
+            {% if skill_list %}
+            <p>A running list of tools I'm learning and leveling up.</p>
             {% endif %}
-            <div class="pt-6 pb-15 flex flex-col gap-4">
-                {% for experience in experience_list %}
-                <div class="exp-card">
-                    <div class="exp-header">
-                        <p class="exp-title">{{ experience.title }}</p>
-                        <p class="exp-category">{{ experience.get_category_display }}</p>
+            <div class="mt-10 mb-10 flex flex-col divide-y divide-muted border-y border-muted">
+                {% for skill in skill_list %}
+                <div class="grid gap-4 py-6 md:grid-template-areas['tech'_'stacks'] md:grid-cols-[1fr_2.5fr] md:items-start">
+                    <div class="md:[grid-area:'tech'] flex items-center gap-2.5">
+                        <iconify-icon icon="{{ skill.icon }}" class="w-6 h-6 text-primary text-2xl"></iconify-icon>
+                        <p class="text-ink">{{ skill.field }}</p>
                     </div>
-                    <div class="exp-time">
-                        {% if experience.is_ongoing %}
-                        <p>{{ experience.started_at }} - Present</p>
-                        {% elif experience.is_blank_start %}
-                        <p>{{ experience.ended_at }}</p>
-                        {% else %}
-                        <p>{{ experience.started_at }} - {{ experience.ended_at }}</p>
-                        {% endif %}
+                    <div class="md:[grid-area:'stacks'] flex flex-wrap gap-2">
+                        {% for tech in skill.tech_stack %}
+                        <span class="tag">{{ tech }}</span>
+                        {% endfor %}
                     </div>
-                    <div class="exp-description"><p>{{ experience.description }}</p></div>
                 </div>
                 {% empty %}
-                <p>No experiences have been added yet.</p>
+                <p class="empty-state">No skills have been added yet.</p>
                 {% endfor %}
             </div>
+            {% if skill_list %}
+            <p>and more to learn...</p>
+            {% endif %}
         </section>
     </main>
 

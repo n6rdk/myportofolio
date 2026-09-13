@@ -29,3 +29,22 @@ class Experience(models.Model):
     @property
     def is_blank_start(self):
         return self.started_at is None
+    
+class Skill(models.Model):
+    field = models.CharField(max_length=128)
+    icon = models.CharField(max_length=64, blank=True, default='lucide:code')
+    tech_stack = models.JSONField(blank=True, default=list)
+    
+class Education(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    institution = models.CharField(max_length=255)
+    major = models.CharField(max_length=255)
+    started_at = models.PositiveIntegerField(blank=True, null=True)
+    ended_at = models.PositiveIntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return self.institution
+
+    @property
+    def is_ongoing(self):
+        return self.ended_at is None

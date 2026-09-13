@@ -92,6 +92,16 @@
     100% { border-color: transparent; }
 }
 
+@media (max-width: 767px) {
+    .wrap-mobile {
+        white-space: normal;
+        width: auto;
+        border-right: none;
+        animation: none;
+        word-break: break-word;
+    }
+}
+
 .neon-flicker {
     animation: neon-flicker 3s infinite;
 }
@@ -213,5 +223,42 @@
 .exp-description {
     grid-area: description;
     color: rgb(230 241 255 / 0.8);
+    font-size: 0.875rem;
+}
+
+.edu-card {
+    width: 100%;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-muted);
+    border-radius: 0.25rem;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    transition: border-color 200ms ease, filter 200ms ease;
+}
+
+.edu-card:hover {
+    border-color: var(--color-primary);
+    filter: drop-shadow(0 0 5px var(--color-primary));
+}
+
+.edu-year {
+    color: var(--color-accent2);
+    font-size: 0.875rem;
+}
+
+.edu-title {
+    font-weight: 700;
+    font-size: 1.125rem;
+    transition: color 200ms ease;
+}
+
+.edu-card:hover .edu-title {
+    color: var(--color-primary);
+}
+
+.edu-major {
+    color: var(--color-muted);
     font-size: 0.875rem;
 }
