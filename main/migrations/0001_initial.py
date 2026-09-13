@@ -20,7 +20,7 @@ class Migration(migrations.Migration):
                 ('description', models.TextField()),
                 ('category', models.CharField(choices=[('internship', 'Internship'), ('research', 'Research'), ('volunteer', 'Volunteer'), ('part-time', 'Part-Time'), ('full-time', 'Full-Time'), ('freelance', 'Freelance')], default='full-time', max_length=20)),
                 ('thumbnail', models.URLField(blank=True, null=True)),
-                ('started_at', models.PositiveIntegerField(auto_now_add=True)),
+                ('started_at', models.PositiveIntegerField(blank=True, null=True)),
                 ('ended_at', models.PositiveIntegerField(blank=True, null=True)),
             ],
         ),
