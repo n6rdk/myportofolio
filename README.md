@@ -1,8 +1,8 @@
 # Nabila — Portfolio Website
 
-> Website portofolio pribadi yang saat ini dibuat sebagai web statis untuk menunjukkan latar belakang, kemampuan teknis, dan informasi mengenai kontak.
+> Website portofolio pribadi yang berisi profil, latar belakang akademik, pengalaman, serta berbagai kemampuan teknis yang sedang dipelajari dan dikembangkan.
 
-
+Live site: nabila-oktavia51-myportofolio.pws.cs.ui.ac.id
 ## About the Project
 
 Project ini merupakan website portofolio pribadi yang dikembangkan sebagai bagian dari penugasan mata kuliah **Pemrograman Berbasis Platform**.
@@ -13,7 +13,7 @@ Versi saat ini memuat tiga halaman:
 
 * **Profile** (halaman utama) — memperkenalkan identitas, latar belakang singkat, riwayat pendidikan, dan bagian kontak.
 * **Experience** — menampilkan pengalaman organisasi, kegiatan volunteer, dan kompetisi yang pernah diikuti.
-* **Skill** — menyajikan tech stack untuk data science cybersecurity, dan bahasa pemrograman yang sedang dipelajari.
+* **Skill** — menyajikan field dan tech-stack yang sedang dieksplorasi.
 
 ## Features
 
@@ -31,13 +31,21 @@ Versi saat ini memuat tiga halaman:
 | Django        | Framework web yang digunakan untuk menyusun dan menjalankan situs web                    |           
 | HTML5               | Menentukan struktur dan konten situs web     |
 | Tailwind CSS        | Mengatur sebagian besar layout, spacing, typography, warna, dan responsive design menggunakan utility classes            |
-| CSS3        | Membuat custom styling untuk komponen yang digunakan berulang, seperti button dan tag melalui `input.css`               |
+| CSS3        | Menambahkan styling dan animasi khusus untuk komponen dengan desain kompleks atau komponen yang digunakan berulang melalui `input.css`               |
 | Iconify             | Menyediakan icon yang digunakan                    |
 
 ## Project Structure
 
 ```text
 myportofolio/
+├── main/
+│   ├── migrations/
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── models.py
+│   ├── tests.py
+│   ├── urls.py
+│   └── views.py
 ├── portofolio/
 │   ├── __init__.py
 │   ├── asgi.py
@@ -51,8 +59,13 @@ myportofolio/
 │   └── img/
 │       └── self.png
 ├── templates/
-│   └── index.html
+│   ├── experience.html
+│   ├── index.html
+│   └── skill.html
+├── .gitignore
 ├── manage.py
+├── package-lock.json
+├── package.json
 ├── README.md
 └── requirements.txt
 ```
@@ -107,33 +120,44 @@ Kemudian buka website melalui alamat development server yang diberikan oleh Djan
 
 ### Week 1
 
-* Setup project
-* Mendesign ulang layout, color pallette, dan font yang digunakan pada website ini
-* Membuat section skills dan contact
-* Deploy ke Pacil Web Service (PWS)
+* Setup project.
+* Mendesign ulang layout, color pallette, dan font yang digunakan pada website ini.
+* Membuat section skills dan contact.
+* Deploy ke Pacil Web Service (PWS).
+
+### Week 2
+* Implementasi tutorial 2 (MVT pada Django).
+* Migrasi Tailwind CSS dari CDN ke local build.
+* Memindahkan section skill pada halaman profile menjadi halaman skill tersendiri.
+* Membuat section education pada halaman profile.
+* Membuat section experience.
+* Membuat animasi untuk beberapa teks.
+* Menambahkan 3 model baru, yaitu education, experience, dan skill.
+* Membuat unit test untuk skenario aksesibilitas halaman, isolasi data antarhalaman, navigasi antarhalaman, halaman tidak ditemukan, perilaku model, dan kondisi data kosong.
+
 ---
 
 # Jawaban Pertanyaan Reflektif
 
-## Tugas 1
+## Tugas 2
 
 ### 1)
 
-Dalam pengembangan website pada Tugas 1 ini, saya hanya menggunakan elemen `<section>` karena menurut saya tidak terdapat konten independen yang sesuai untuk menggunakan elemen `<article>`, sebagaimana dijelaskan pada [artikel mengenai penggunaan elemen `<section>` dan `<article>` yang saya baca](https://bahasaweb.com/penggunaan-elemen-section-dan-article-di-html/). Selain itu, saya juga tidak menggunakan elemen `<aside>` karena website yang saya kembangkan tidak atau belum memiliki konten tambahan atau informasi pendukung yang bersifat terpisah dari konten utama.
+Ketika pengguna membuka halaman, misalnya /experience/, browser mengirim HTTP request ke server Django. Request ini kemudian diterima oleh urls.py proyek (portofolio/urls.py), yang berperan sebagai pintu gerbang utama dan mendelegasikan semua path selain admin/ ke main/urls.py melalui include("main.urls"). Selanjutnya, urls.py aplikasi main mencocokkan path experience/ dengan pattern yang terdaftar dan memanggil view yang sesuai, yaitu show_experience di main/views.py.
+
+Di dalam view, data statis (seperti nama) disiapkan, sementara data dinamis diambil dari model melalui query ORM Experience.objects.all(). Query ini diterjemahkan menjadi SQL dan dijalankan ke db.sqlite3 sesuai struktur field yang didefinisikan pada model Experience di main/models.py, menghasilkan queryset berisi data pengalaman. Semua data ini kemudian dikumpulkan dalam dictionary context.
+
+View lalu memanggil render(request, "experience.html", context), sehingga Django mengambil file experience.html dari direktori templates/ dan mengisi placeholder ({{ first_name }}) serta menjalankan tag logika ({% for %}) dengan data dari context, menghasilkan HTML jadi. HTML ini dibungkus dalam HttpResponse dan dikirim ke browser, yang menampilkannya sebagai halaman web lengkap dengan aset statis seperti CSS dan gambar. Alur yang sama berlaku untuk halaman lain, yang membedakan hanya view, model, dan template yang digunakan.
 
 
 ### 2)
 
-Dalam mengatur CSS agar tetap responsif, tantangan yang saya temukan adalah menyesuaikan ukuran dan posisi elemen agar tetap proporsional ketika ukuran layar berubah, terutama saat berpindah dari tampilan desktop ke mobile.
-
-Untuk menentukan elemen yang perlu diubah posisi atau ukurannya, saya mengevaluasi tampilan website pada beberapa ukuran layar dan memperhatikan apakah terdapat elemen yang saling bertumpuk, teks yang terlalu kecil atau terpotong, serta jarak antar elemen yang terlalu rapat. Saya memprioritaskan elemen (terutama layout) berdasarkan estetika dan kenyamanan pengguna (contohnya menyesuaikan ukuran font pada versi mobile).
+Data untuk bagian portofolio baru sebaiknya disimpan pada model agar terpisah dari template sehingga kode lebih rapi dan mudah dikelola. Dengan adanya model, developer cukup mengupdate perubahan melalui model tanpa harus mengubah template sehingga mengurangi risiko error yang dapat terjadi jika melakukan perubahan data pada template.
 
 
 ### 3)
 
-Batasan dari web statis yang saya rasakan sejauh ini, antara lain jika terdapat informasi yang ingin di-update, harus hardcode melalui index.html dan tidak ada timbal-balik dengan pengunjung secara langsung.
-
-Rencana fitur dinamis yang akan saya tambahkan nanti adalah kolom komentar yang dapat digunakan untuk berinteraksi dengan pengunjung.
+`makemigrations` digunakan untuk membuat file migrasi jika membuat model baru atau menambahkan field baru pada sebuah model, sedangkan `migrate` digunakan untuk menerapkan file migrasi tersebut ke database. Contohnya, ketika membuat model Education, saya menjalankan `python manage.py makemigrations` untuk membuat migrasi, kemudian `python manage.py migrate` untuk menambahkan model baru tersebut ke database.
 
 
 ---
@@ -143,6 +167,12 @@ Rencana fitur dinamis yang akan saya tambahkan nanti adalah kolom komentar yang 
 AI digunakan sebagai **alat bantu selama proses pengembangan**, terutama untuk membantu memahami konsep, mengeksplorasi alternatif implementasi, dan melakukan debugging.
 
 AI tidak digunakan sebagai pengganti proses pengambilan keputusan desain. Desain antarmuka website tetap ditentukan berdasarkan preferensi pribadi.
+
+Tools AI yang digunakan: Gemini, Claude
+
+Log penggunaan AI:
+https://share.gemini.google/KMqQVLRNFXIK
+https://claude.ai/share/9fbb6c5f-f5f3-459d-b2de-c9eaabb30696
 
 ## Peran AI
 
@@ -154,6 +184,8 @@ Beberapa hal yang dibantu oleh AI meliputi:
 * Membantu memahami konsep utility grid pada Tailwind.
 * Membantu mengidentifikasi kemungkinan masalah pada struktur HTML dan styling.
 * Membantu membuat kerangka dan sebagian konten `README.md`.
+* Membantu debugging error yang berkaitan dengan database.
+* Membantu memahami dan membuat model dengan field bertipe data array
 
 ## Keterbatasan AI
 
