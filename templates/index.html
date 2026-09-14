@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/style.css">
+    {% load static %} <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
 </head>
 
@@ -42,7 +42,10 @@
                 </div>
                 <div class="[grid-area:photo] justify-self-center md:justify-self-end w-full md:max-w-85 max-w-60">
                     <div class="max-w-xs bg-surface backdrop-blur-md border border-muted rounded-md p-2 shadow-xl">
-                            <img class="relative z-10 block w-full aspect-3/4 object-cover rounded-md" src="/static/img/self.png" alt="Photo of {{ name }}">
+                            {% load static %}
+                        <img class="relative z-10 block w-full aspect-3/4 object-cover rounded-md"
+                            src="{% static 'img/self.png' %}"
+                            alt="Photo of {{ name }}">
                         <div class="flex font-mono text-muted text-xs px-1 pt-1">~/avatar.png</div>
                     </div>
                 </div>
