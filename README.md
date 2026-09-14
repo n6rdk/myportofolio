@@ -7,13 +7,13 @@
 
 Project ini merupakan website portofolio pribadi yang dikembangkan sebagai bagian dari penugasan mata kuliah **Pemrograman Berbasis Platform**.
 
-Situs web ini saat ini dirancang sebagai situs statis yang berfokus pada penyajian informasi pribadi melalui antarmuka yang sederhana, mudah dibaca, dan responsif. Desain visualnya terinspirasi dari tampilan terminal.
+Situs web ini dibangun menggunakan Django dan terdiri dari beberapa halaman yang dapat diakses melalui routing terpisah. Desain visualnya terinspirasi dari tampilan terminal.
 
-Versi saat ini memuat tiga bagian:
+Versi saat ini memuat tiga halaman:
 
-* **About** — memperkenalkan identitas dan latar belakang secara singkat.
-* **Skills** — menyajikan bahasa pemrograman yang biasa digunakan, tech stack untuk data science, dan keterampilan dalam cybersecurity.
-* **Contact** — menyediakan cara untuk terhubung melalui email, LinkedIn, dan GitHub.
+* **Profile** (halaman utama) — memperkenalkan identitas, latar belakang singkat, riwayat pendidikan, dan bagian kontak.
+* **Experience** — menampilkan pengalaman organisasi, kegiatan volunteer, dan kompetisi yang pernah diikuti.
+* **Skill** — menyajikan tech stack untuk data science cybersecurity, dan bahasa pemrograman yang sedang dipelajari.
 
 ## Features
 
@@ -31,7 +31,7 @@ Versi saat ini memuat tiga bagian:
 | Django        | Framework web yang digunakan untuk menyusun dan menjalankan situs web                    |           
 | HTML5               | Menentukan struktur dan konten situs web     |
 | Tailwind CSS        | Mengatur sebagian besar layout, spacing, typography, warna, dan responsive design menggunakan utility classes            |
-| CSS3        | Membuat custom styling untuk komponen yang digunakan berulang, seperti button dan tag melalui `style.css`               |
+| CSS3        | Membuat custom styling untuk komponen yang digunakan berulang, seperti button dan tag melalui `input.css`               |
 | Iconify             | Menyediakan icon yang digunakan                    |
 
 ## Project Structure
