@@ -1,3 +1,4 @@
+{% load static %} 
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,12 +8,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
-    <{% load static %} <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
 </head>
 
 <body class="bg-bg antialiased min-h-screen flex flex-col justify-between selection:bg-primary selection:text-bg">
-    <header class="sticky w-full bg-bg/85 backdrop-blur-md border-b border-muted/15 font-mono text-ink">
+    <header class="sticky top-0 z-50 w-full bg-bg/85 backdrop-blur-xl border-b border-muted/15 font-mono text-ink">
         <div class="max-w-5xl mx-auto flex justify-between items-center py-4 px-5 md:py-5 md:px-5 text-xs md:text-base">
             <a href="{% url 'main:show_main' %}" class="text-primary">~/Nabila</a>
             <nav class="text-muted">
