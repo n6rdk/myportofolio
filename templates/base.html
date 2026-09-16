@@ -27,6 +27,9 @@
                 <a href="{% url 'main:show_skill' %}">
                     /<span class="{% if request.resolver_match.url_name == 'show_skill' %}text-primary{% else %}hover:text-primary{% endif %}">skill</span>
                 </a>
+                <a href="{% url 'main:show_projects' %}">
+                    /<span class="{% if request.resolver_match.url_name == 'show_projects' %}text-primary{% else %}hover:text-primary{% endif %}">projects</span>
+                </a>
             </nav>
         </div>
     </header>
