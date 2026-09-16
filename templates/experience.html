@@ -1,85 +1,36 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ first_name }} - Portfolio</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
-</head>
-
-<body class="bg-bg antialiased min-h-screen flex flex-col justify-between selection:bg-primary selection:text-bg">
-    <header class="sticky top-0 z-50 w-full bg-bg/85 backdrop-blur-md border-b border-muted/15 font-mono text-ink">
-        <div class="max-w-5xl mx-auto flex justify-between items-center py-4 px-5 md:py-5 md:px-5 text-xs md:text-base">
-            <a href="{% url 'main:show_main' %}" class="text-primary">~/Nabila</a>
-            <nav class="text-muted">
-                <a href="{% url 'main:show_main' %}">
-                    /<span class="{% if request.resolver_match.url_name == 'show_main' %}text-primary{% else %}hover:text-primary{% endif %}">profile</span>
-                </a>
-                <a href="{% url 'main:show_experience' %}">
-                    /<span class="{% if request.resolver_match.url_name == 'show_experience' %}text-primary{% else %}hover:text-primary{% endif %}">experience</span>
-                </a>
-                <a href="{% url 'main:show_skill' %}">
-                    /<span class="{% if request.resolver_match.url_name == 'show_skill' %}text-primary{% else %}hover:text-primary{% endif %}">skill</span>
-                </a>
-            </nav>
-        </div>
-    </header>
-
-    <main class="max-w-5xl mx-auto w-full px-7 py-7 md:px-5">
-        <section id="experience" class="font-mono text-ink">
-            <h2 class="mb-10 drop-shadow-[0_0_5px_var(--color-primary)]">
-                ~/<span class="text-primary text-lg font-bold neon-blink">experience</span>
-            </h2>
-            <p class="typing-text text-accent1" style="--chars:22">$ cat experiences.log</p>
-            {% if experience_list %}
-            <p>My experiences so far.</p>
-            {% endif %}
-            <div class="pt-6 pb-15 flex flex-col gap-4">
-                {% for experience in experience_list %}
-                <div class="exp-card">
-                    <div class="exp-header">
-                        <p class="exp-title">{{ experience.title }}</p>
-                        <p class="exp-category">{{ experience.get_category_display }}</p>
-                    </div>
-                    <div class="exp-time">
-                        {% if experience.is_ongoing %}
-                        <p>{{ experience.started_at }} - Present</p>
-                        {% elif experience.is_blank_start %}
-                        <p>{{ experience.ended_at }}</p>
-                        {% else %}
-                        <p>{{ experience.started_at }} - {{ experience.ended_at }}</p>
-                        {% endif %}
-                    </div>
-                    <div class="exp-description"><p>{{ experience.description }}</p></div>
+{% extends 'base.html' %}
+{% block content %}
+<main class="max-w-5xl mx-auto w-full px-7 py-7 md:px-5">
+    <section id="experience" class="font-mono text-ink">
+        <h2 class="mb-10 drop-shadow-[0_0_5px_var(--color-primary)]">
+            ~/<span class="text-primary text-lg font-bold neon-blink">experience</span>
+        </h2>
+        <p class="typing-text text-accent1" style="--chars:22">$ cat experiences.log</p>
+        {% if experience_list %}
+        <p>My experiences so far.</p>
+        {% endif %}
+        <div class="pt-6 pb-15 flex flex-col gap-4">
+            {% for experience in experience_list %}
+            <div class="exp-card">
+                <div class="exp-header">
+                    <p class="exp-title">{{ experience.title }}</p>
+                    <p class="exp-category">{{ experience.get_category_display }}</p>
                 </div>
-                {% empty %}
-                <p>No experiences have been added yet.</p>
-                {% endfor %}
+                <div class="exp-time">
+                    {% if experience.is_ongoing %}
+                    <p>{{ experience.started_at }} - Present</p>
+                    {% elif experience.is_blank_start %}
+                    <p>{{ experience.ended_at }}</p>
+                    {% else %}
+                    <p>{{ experience.started_at }} - {{ experience.ended_at }}</p>
+                    {% endif %}
+                </div>
+                <div class="exp-description"><p>{{ experience.description }}</p></div>
             </div>
-        </section>
-    </main>
-
-    <footer class="w-full border-t border-muted/15 bg-background py-8 font-mono text-xs text-muted">
-        <div class="max-w-5xl mx-auto px-5 flex flex-col md:flex-row justify-between items-center gap-4">
-            <div class="flex flex-col md:flex-row items-center gap-1 md:gap-2 text-center md:text-left">
-                <span class="text-ink font-semibold">&copy; 2026 {{ first_name }} {{ middle_name }} {{ last_name }}</span>
-                <span class="hidden md:inline text-muted/40">•</span>
-                <span>Fakultas Ilmu Komputer, Universitas Indonesia</span>
-            </div>
-
-            <div class="flex items-center gap-2 bg-surface px-3 py-1.5 rounded border border-muted/20 text-[11px]">
-                <span class="relative flex h-2 w-2">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded bg-primary opacity-75"></span>
-                    <span class="relative inline-flex rounded h-2 w-2 bg-primary"></span>
-                </span>
-                <span class="text-ink">Built with patience</span>
-            </div>
+            {% empty %}
+            <p>No experiences have been added yet.</p>
+            {% endfor %}
         </div>
-    </footer>
-</body>
-</html>
+    </section>
+</main>
+{% endblock content %}

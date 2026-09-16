@@ -1,149 +1,100 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ first_name }} - Portfolio</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
-</head>
-
-<body class="bg-bg antialiased min-h-screen flex flex-col justify-between selection:bg-primary selection:text-bg">
-    <header class="sticky top-0 z-50 w-full bg-bg/85 backdrop-blur-md border-b border-muted/15 font-mono text-ink">
-        <div class="max-w-5xl mx-auto flex justify-between items-center py-4 px-5 md:py-5 md:px-5 text-xs md:text-base">
-            <a href="{% url 'main:show_main' %}" class="text-primary">~/Nabila</a>
-            <nav class="text-muted">
-                <a href="{% url 'main:show_main' %}">
-                    /<span class="{% if request.resolver_match.url_name == 'show_main' %}text-primary{% else %}hover:text-primary{% endif %}">profile</span>
-                </a>
-                <a href="{% url 'main:show_experience' %}">
-                    /<span class="{% if request.resolver_match.url_name == 'show_experience' %}text-primary{% else %}hover:text-primary{% endif %}">experience</span>
-                </a>
-                <a href="{% url 'main:show_skill' %}">
-                    /<span class="{% if request.resolver_match.url_name == 'show_skill' %}text-primary{% else %}hover:text-primary{% endif %}">skill</span>
-                </a>
-            </nav>
-        </div>
-    </header>
-
-    <main class="max-w-5xl mx-auto px-7 py-7 md:px-5">
-        <section id="about" class="pt-3 pb-3">
-            <div class="grid grid-cols-1 flex-col md:grid-cols-[1.3fr_1fr] [grid-template-areas:'identity'_'photo'_'details'] md:[grid-template-areas:'identity_photo'_'details_photo'] gap-y-6 gap-x-12 items-center w-full">
-                <div class="[grid-area:identity] font-mono">
-                    <p class="text-[0.85rem] tracking-[0.08em] text-accent1 mb-3 typing-text" style="--chars:9">$ whoami</p>
-                    <h1 class="text-[clamp(3rem,7vw,5rem)] leading-[0.95] font-bold uppercase text-ink">
-                        <span class="text-primary drop-shadow-[0_0_5px_var(--color-primary)] neon-flicker">{{ first_name }}</span>
-                        <br>{{ middle_name }}
-                        <br>{{ last_name }}
-                    </h1>
-                </div>
-                <div class="[grid-area:photo] justify-self-center md:justify-self-end w-full md:max-w-85 max-w-60">
-                    <div class="max-w-xs bg-surface backdrop-blur-md border border-muted rounded-md p-2 shadow-xl">
-                            
-                        <img class="relative z-10 block w-full aspect-3/4 object-cover rounded-md"
-                            src="{% static 'img/self.png' %}"
-                            alt="Photo of {{ name }}">
-                        <div class="flex font-mono text-muted text-xs px-1 pt-1">~/avatar.png</div>
-                    </div>
-                </div>
-                <div class="[grid-area:details] hero-details space-y-6">
-                    <p class="text-base md:text-lg font-sans text-ink leading-relaxed">{{ bio }}</p>
-                    <div class="grid grid-cols-2 items-start font-mono">
-                        <div>
-                            <dt class="text-accent1 typing-text" style="--chars:13">$ cat npm.txt</dt>
-                            <dd class="text-ink">{{ npm }}</dd>
-                        </div>
-                        <div>
-                            <dt class="text-accent1 typing-text" style="--chars:15">$ cat major.txt</dt>
-                            <dd class="text-ink">{{ major }}</dd>
-                        </div>
-                    </div>
-                    <div class="font-mono">
-                        <a href="#contact" class="btn">
-                            <iconify-icon icon="lucide:message-square"></iconify-icon>
-                            <span>GET IN TOUCH</span>
-                        </a>
-                    </div>
+{% extends 'base.html' %}
+{% block content %}
+<main class="max-w-5xl mx-auto px-7 py-7 md:px-5">
+    <section id="about" class="pt-3 pb-3">
+        <div class="grid grid-cols-1 flex-col md:grid-cols-[1.3fr_1fr] [grid-template-areas:'identity'_'photo'_'details'] md:[grid-template-areas:'identity_photo'_'details_photo'] gap-y-6 gap-x-12 items-center w-full">
+            <div class="[grid-area:identity] font-mono">
+                <p class="text-[0.85rem] tracking-[0.08em] text-accent1 mb-3 typing-text" style="--chars:9">$ whoami</p>
+                <h1 class="text-[clamp(3rem,7vw,5rem)] leading-[0.95] font-bold uppercase text-ink">
+                    <span class="text-primary drop-shadow-[0_0_5px_var(--color-primary)] neon-flicker">{{ first_name }}</span>
+                    <br>{{ middle_name }}
+                    <br>{{ last_name }}
+                </h1>
+            </div>
+            <div class="[grid-area:photo] justify-self-center md:justify-self-end w-full md:max-w-85 max-w-60">
+                <div class="max-w-xs bg-surface backdrop-blur-md border border-muted rounded-md p-2 shadow-xl">
+                        
+                    <img class="relative z-10 block w-full aspect-3/4 object-cover rounded-md"
+                        src="{% static 'img/self.png' %}"
+                        alt="Photo of {{ name }}">
+                    <div class="flex font-mono text-muted text-xs px-1 pt-1">~/avatar.png</div>
                 </div>
             </div>
-        </section>
+            <div class="[grid-area:details] hero-details space-y-6">
+                <p class="text-base md:text-lg font-sans text-ink leading-relaxed">{{ bio }}</p>
+                <div class="grid grid-cols-2 items-start font-mono">
+                    <div>
+                        <dt class="text-accent1 typing-text" style="--chars:13">$ cat npm.txt</dt>
+                        <dd class="text-ink">{{ npm }}</dd>
+                    </div>
+                    <div>
+                        <dt class="text-accent1 typing-text" style="--chars:15">$ cat major.txt</dt>
+                        <dd class="text-ink">{{ major }}</dd>
+                    </div>
+                </div>
+                <div class="font-mono">
+                    <a href="#contact" class="btn">
+                        <iconify-icon icon="lucide:message-square"></iconify-icon>
+                        <span>GET IN TOUCH</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        <section id="education" class="font-mono text-ink pt-15 pb-10">
-            <h2 class="mb-10 drop-shadow-[0_0_5px_var(--color-primary)]">
-                ~/<span class="text-primary text-lg font-bold neon-blink">education</span>
+    <section id="education" class="font-mono text-ink pt-15 pb-10">
+        <h2 class="mb-10 drop-shadow-[0_0_5px_var(--color-primary)]">
+            ~/<span class="text-primary text-lg font-bold neon-blink">education</span>
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {% for edu in education_list %}
+            <div class="edu-card">
+                <p class="edu-year">
+                    {% if edu.is_ongoing %}
+                    {{ edu.started_at }} - Present
+                    {% else %}
+                    {{ edu.started_at }} - {{ edu.ended_at }}
+                    {% endif %}
+                </p>
+                <p class="edu-title">{{ edu.institution }}</p>
+                <p class="edu-major">{{ edu.major }}</p>
+            </div>
+            {% empty %}
+            <p class="empty-state">No education records yet.</p>
+            {% endfor %}
+        </div>
+    </section>
+    
+    <section id="contact" class="pt-15 pb-10">
+        <div class="font-mono text-muted">
+            <h2 class="mb-5 drop-shadow-[0_0_5px_var(--color-primary)]">
+                ~/<span class="text-primary text-lg font-bold neon-blink">contact</span>
             </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {% for edu in education_list %}
-                <div class="edu-card">
-                    <p class="edu-year">
-                        {% if edu.is_ongoing %}
-                        {{ edu.started_at }} - Present
-                        {% else %}
-                        {{ edu.started_at }} - {{ edu.ended_at }}
-                        {% endif %}
-                    </p>
-                    <p class="edu-title">{{ edu.institution }}</p>
-                    <p class="edu-major">{{ edu.major }}</p>
+
+            <div class="grid gap-6 py-6 md:grid-cols-[1fr_auto_1fr] md:[grid-template-areas:'text_line_contact'] items-center">
+                <div class="md:[grid-area:text] flex flex-col justify-center">
+                    <h1 class="font-mono text-2xl md:text-4xl font-bold uppercase text-ink">
+                        LET'S <span class="text-primary neon-flicker">CONNECT</span>
+                    </h1>
+                    <p class="font-sans text-muted text mt-1">Feel free to reach out.</p>
                 </div>
-                {% empty %}
-                <p class="empty-state">No education records yet.</p>
-                {% endfor %}
-            </div>
-        </section>
-        
-        <section id="contact" class="pt-15 pb-10">
-            <div class="font-mono text-muted">
-                <h2 class="mb-5 drop-shadow-[0_0_5px_var(--color-primary)]">
-                    ~/<span class="text-primary text-lg font-bold neon-blink">contact</span>
-                </h2>
-
-                <div class="grid gap-6 py-6 md:grid-cols-[1fr_auto_1fr] md:[grid-template-areas:'text_line_contact'] items-center">
-                    <div class="md:[grid-area:text] flex flex-col justify-center">
-                        <h1 class="font-mono text-2xl md:text-4xl font-bold uppercase text-ink">
-                            LET'S <span class="text-primary neon-flicker">CONNECT</span>
-                        </h1>
-                        <p class="font-sans text-muted text mt-1">Feel free to reach out.</p>
-                    </div>
-                    <div class="md:[grid-area:line] hidden md:block w-[px] h-20 bg-muted"></div>
-                    <div class="md:[grid-area:contact] flex flex-col justify-start items-start text-xs md:text-sm md:p-5 gap-2">
-                        <a href="mailto:nabilaoktavia1975@gmail.com" class="flex items-center gap-2 text-ink hover:text-primary">
-                            <iconify-icon icon="lucide:mail" class="text-xl text-primary shrink-0"></iconify-icon>
-                            <span>nabilaoktavia1975@gmail.com</span>
-                        </a>
-                        <a href="https://www.linkedin.com/in/nabila-oktavia-ramadhani-b28544333/" class="flex items-center gap-2 text-ink hover:text-primary">
-                            <iconify-icon icon="lucide:linkedin" class="text-xl text-primary shrink-0"></iconify-icon>
-                            <span>linkedin.com/in/nabila-oktavia-ramadhani</span>
-                        </a>
-                        <a href="https://github.com/n6rdk" class="flex items-center gap-2 text-ink hover:text-primary">
-                            <iconify-icon icon="lucide:github" class="text-xl text-primary shrink-0"></iconify-icon>
-                            <span>github.com/n6rdk</span>
-                        </a>
-                    </div>
+                <div class="md:[grid-area:line] hidden md:block w-[px] h-20 bg-muted"></div>
+                <div class="md:[grid-area:contact] flex flex-col justify-start items-start text-xs md:text-sm md:p-5 gap-2">
+                    <a href="mailto:nabilaoktavia1975@gmail.com" class="flex items-center gap-2 text-ink hover:text-primary">
+                        <iconify-icon icon="lucide:mail" class="text-xl text-primary shrink-0"></iconify-icon>
+                        <span>nabilaoktavia1975@gmail.com</span>
+                    </a>
+                    <a href="https://www.linkedin.com/in/nabila-oktavia-ramadhani-b28544333/" class="flex items-center gap-2 text-ink hover:text-primary">
+                        <iconify-icon icon="lucide:linkedin" class="text-xl text-primary shrink-0"></iconify-icon>
+                        <span>linkedin.com/in/nabila-oktavia-ramadhani</span>
+                    </a>
+                    <a href="https://github.com/n6rdk" class="flex items-center gap-2 text-ink hover:text-primary">
+                        <iconify-icon icon="lucide:github" class="text-xl text-primary shrink-0"></iconify-icon>
+                        <span>github.com/n6rdk</span>
+                    </a>
                 </div>
-            </div>
-        </section>
-    </main>
-
-    <footer class="w-full border-t border-muted/15 bg-background py-8 font-mono text-xs text-muted">
-        <div class="max-w-5xl mx-auto px-5 flex flex-col md:flex-row justify-between items-center gap-4">
-            <div class="flex flex-col md:flex-row items-center gap-1 md:gap-2 text-center md:text-left">
-                <span class="text-ink font-semibold">&copy; 2026 {{ first_name }} {{ middle_name }} {{ last_name }}</span>
-                <span class="hidden md:inline text-muted/40">•</span>
-                <span>Fakultas Ilmu Komputer, Universitas Indonesia</span>
-            </div>
-
-            <div class="flex items-center gap-2 bg-surface px-3 py-1.5 rounded border border-muted/20 text-[11px]">
-                <span class="relative flex h-2 w-2">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded bg-primary opacity-75"></span>
-                    <span class="relative inline-flex rounded h-2 w-2 bg-primary"></span>
-                </span>
-                <span class="text-ink">Built with patience</span>
             </div>
         </div>
-    </footer>
-</body>
-</html>
+    </section>
+</main>
+{% endblock content %}
