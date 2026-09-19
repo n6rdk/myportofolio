@@ -1,101 +1,104 @@
 {% extends 'base.html' %}
 {% load static %}
+
+{% block meta %} 
+<title>{{ first_name }}'s Portfolio</title>
+{% endblock meta %}
+
 {% block content %}
-<main class="max-w-5xl mx-auto px-7 py-7 md:px-5">
-    <section id="about" class="pt-3 pb-3">
-        <div class="grid grid-cols-1 flex-col md:grid-cols-[1.3fr_1fr] [grid-template-areas:'identity'_'photo'_'details'] md:[grid-template-areas:'identity_photo'_'details_photo'] gap-y-6 gap-x-12 items-center w-full">
-            <div class="[grid-area:identity] font-mono">
-                <p class="text-[0.85rem] tracking-[0.08em] text-accent1 mb-3 typing-text" style="--chars:9">$ whoami</p>
-                <h1 class="text-[clamp(3rem,7vw,5rem)] leading-[0.95] font-bold uppercase text-ink">
-                    <span class="text-primary drop-shadow-[0_0_5px_var(--color-primary)] neon-flicker">{{ first_name }}</span>
-                    <br>{{ middle_name }}
-                    <br>{{ last_name }}
-                </h1>
-            </div>
-            <div class="[grid-area:photo] justify-self-center md:justify-self-end w-full md:max-w-85 max-w-60">
-                <div class="max-w-xs bg-surface backdrop-blur-md border border-muted rounded-md p-2 shadow-xl">
-                        
-                    <img class="relative z-10 block w-full aspect-3/4 object-cover rounded-md"
-                        src="{% static 'img/self.png' %}"
-                        alt="Photo of {{ name }}">
-                    <div class="flex font-mono text-muted text-xs px-1 pt-1">~/avatar.png</div>
-                </div>
-            </div>
-            <div class="[grid-area:details] hero-details space-y-6">
-                <p class="text-base md:text-lg font-sans text-ink leading-relaxed">{{ bio }}</p>
-                <div class="grid grid-cols-2 items-start font-mono">
-                    <div>
-                        <dt class="text-accent1 typing-text" style="--chars:13">$ cat npm.txt</dt>
-                        <dd class="text-ink">{{ npm }}</dd>
-                    </div>
-                    <div>
-                        <dt class="text-accent1 typing-text" style="--chars:15">$ cat major.txt</dt>
-                        <dd class="text-ink">{{ major }}</dd>
-                    </div>
-                </div>
-                <div class="font-mono">
-                    <a href="#contact" class="btn">
-                        <iconify-icon icon="lucide:message-square"></iconify-icon>
-                        <span>GET IN TOUCH</span>
-                    </a>
-                </div>
+<section id="about">
+    <div class="grid grid-cols-1 flex-col md:grid-cols-[1.3fr_1fr] [grid-template-areas:'identity'_'photo'_'details'] md:[grid-template-areas:'identity_photo'_'details_photo'] gap-y-6 gap-x-12 items-center w-full">
+        <div class="[grid-area:identity] font-mono">
+            <p class="text-[0.85rem] tracking-[0.08em] text-accent1 mb-3 typing-text" style="--chars:9">$ whoami</p>
+            <h1 class="text-[clamp(3rem,7vw,5rem)] leading-[0.95] font-bold uppercase text-ink">
+                <span class="text-primary drop-shadow-[0_0_5px_var(--color-primary)] neon-flicker">{{ first_name }}</span>
+                <br>{{ middle_name }}
+                <br>{{ last_name }}
+            </h1>
+        </div>
+        <div class="[grid-area:photo] justify-self-center md:justify-self-end w-full md:max-w-85 max-w-60">
+            <div class="max-w-xs bg-surface backdrop-blur-md border border-muted rounded-md p-2 shadow-xl">
+                    
+                <img class="relative z-10 block w-full aspect-3/4 object-cover rounded-md"
+                    src="{% static 'img/self.png' %}"
+                    alt="Photo of {{ name }}">
+                <div class="flex font-mono text-muted text-xs px-1 pt-1">~/avatar.png</div>
             </div>
         </div>
-    </section>
+        <div class="[grid-area:details] hero-details space-y-6">
+            <p class="text-base md:text-lg font-sans text-ink leading-relaxed">{{ bio }}</p>
+            <div class="grid grid-cols-2 items-start font-mono">
+                <div>
+                    <dt class="text-accent1 typing-text" style="--chars:13">$ cat npm.txt</dt>
+                    <dd class="text-ink">{{ npm }}</dd>
+                </div>
+                <div>
+                    <dt class="text-accent1 typing-text" style="--chars:15">$ cat major.txt</dt>
+                    <dd class="text-ink">{{ major }}</dd>
+                </div>
+            </div>
+            <div class="font-mono">
+                <a href="#contact" class="btn">
+                    <iconify-icon icon="lucide:message-square"></iconify-icon>
+                    <span>GET IN TOUCH</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
 
-    <section id="education" class="font-mono text-ink pt-15 pb-10">
-        <h2 class="mb-10 drop-shadow-[0_0_5px_var(--color-primary)]">
-            ~/<span class="text-primary text-lg font-bold neon-blink">education</span>
+<section id="education" class="font-mono text-ink pt-15 pb-10">
+    <h2 class="mb-10 drop-shadow-[0_0_5px_var(--color-primary)]">
+        ~/<span class="text-primary text-lg font-bold neon-blink">education</span>
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {% for edu in education_list %}
+        <div class="edu-card">
+            <p class="edu-year">
+                {% if edu.is_ongoing %}
+                {{ edu.started_at }} - Present
+                {% else %}
+                {{ edu.started_at }} - {{ edu.ended_at }}
+                {% endif %}
+            </p>
+            <p class="edu-title">{{ edu.institution }}</p>
+            <p class="edu-major">{{ edu.major }}</p>
+        </div>
+        {% empty %}
+        <p class="empty-state">No education records yet.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<section id="contact" class="pt-15 pb-10">
+    <div class="font-mono text-muted">
+        <h2 class="mb-5 drop-shadow-[0_0_5px_var(--color-primary)]">
+            ~/<span class="text-primary text-lg font-bold neon-blink">contact</span>
         </h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {% for edu in education_list %}
-            <div class="edu-card">
-                <p class="edu-year">
-                    {% if edu.is_ongoing %}
-                    {{ edu.started_at }} - Present
-                    {% else %}
-                    {{ edu.started_at }} - {{ edu.ended_at }}
-                    {% endif %}
-                </p>
-                <p class="edu-title">{{ edu.institution }}</p>
-                <p class="edu-major">{{ edu.major }}</p>
-            </div>
-            {% empty %}
-            <p class="empty-state">No education records yet.</p>
-            {% endfor %}
-        </div>
-    </section>
-    
-    <section id="contact" class="pt-15 pb-10">
-        <div class="font-mono text-muted">
-            <h2 class="mb-5 drop-shadow-[0_0_5px_var(--color-primary)]">
-                ~/<span class="text-primary text-lg font-bold neon-blink">contact</span>
-            </h2>
 
-            <div class="grid gap-6 py-6 md:grid-cols-[1fr_auto_1fr] md:[grid-template-areas:'text_line_contact'] items-center">
-                <div class="md:[grid-area:text] flex flex-col justify-center">
-                    <h1 class="font-mono text-2xl md:text-4xl font-bold uppercase text-ink">
-                        LET'S <span class="text-primary neon-flicker">CONNECT</span>
-                    </h1>
-                    <p class="font-sans text-muted text mt-1">Feel free to reach out.</p>
-                </div>
-                <div class="md:[grid-area:line] hidden md:block w-[px] h-20 bg-muted"></div>
-                <div class="md:[grid-area:contact] flex flex-col justify-start items-start text-xs md:text-sm md:p-5 gap-2">
-                    <a href="mailto:nabilaoktavia1975@gmail.com" class="flex items-center gap-2 text-ink hover:text-primary">
-                        <iconify-icon icon="lucide:mail" class="text-xl text-primary shrink-0"></iconify-icon>
-                        <span>nabilaoktavia1975@gmail.com</span>
-                    </a>
-                    <a href="https://www.linkedin.com/in/nabila-oktavia-ramadhani-b28544333/" class="flex items-center gap-2 text-ink hover:text-primary">
-                        <iconify-icon icon="lucide:linkedin" class="text-xl text-primary shrink-0"></iconify-icon>
-                        <span>linkedin.com/in/nabila-oktavia-ramadhani</span>
-                    </a>
-                    <a href="https://github.com/n6rdk" class="flex items-center gap-2 text-ink hover:text-primary">
-                        <iconify-icon icon="lucide:github" class="text-xl text-primary shrink-0"></iconify-icon>
-                        <span>github.com/n6rdk</span>
-                    </a>
-                </div>
+        <div class="grid gap-6 py-6 md:grid-cols-[1fr_auto_1fr] md:[grid-template-areas:'text_line_contact'] items-center">
+            <div class="md:[grid-area:text] flex flex-col justify-center">
+                <h1 class="font-mono text-2xl md:text-4xl font-bold uppercase text-ink">
+                    LET'S <span class="text-primary neon-flicker">CONNECT</span>
+                </h1>
+                <p class="font-sans text-muted text mt-1">Feel free to reach out.</p>
+            </div>
+            <div class="md:[grid-area:line] hidden md:block w-[px] h-20 bg-muted"></div>
+            <div class="md:[grid-area:contact] flex flex-col justify-start items-start text-xs md:text-sm md:p-5 gap-2">
+                <a href="mailto:nabilaoktavia1975@gmail.com" class="flex items-center gap-2 text-ink hover:text-primary">
+                    <iconify-icon icon="lucide:mail" class="text-xl text-primary shrink-0"></iconify-icon>
+                    <span>nabilaoktavia1975@gmail.com</span>
+                </a>
+                <a href="https://www.linkedin.com/in/nabila-oktavia-ramadhani-b28544333/" class="flex items-center gap-2 text-ink hover:text-primary">
+                    <iconify-icon icon="lucide:linkedin" class="text-xl text-primary shrink-0"></iconify-icon>
+                    <span>linkedin.com/in/nabila-oktavia-ramadhani</span>
+                </a>
+                <a href="https://github.com/n6rdk" class="flex items-center gap-2 text-ink hover:text-primary">
+                    <iconify-icon icon="lucide:github" class="text-xl text-primary shrink-0"></iconify-icon>
+                    <span>github.com/n6rdk</span>
+                </a>
             </div>
         </div>
-    </section>
-</main>
+    </div>
+</section>
 {% endblock content %}

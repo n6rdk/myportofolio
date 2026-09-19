@@ -39,8 +39,8 @@ def show_skill(request):
     }
     return render(request, "skill.html", context)
 
-def show_projects(request):
-    json_response = get_projects_json(request)
+def show_project(request):
+    json_response = get_project_json(request)
 
     projects = serializers.deserialize(
         "json",
@@ -73,7 +73,7 @@ def create_project(request):
         if form.is_valid():
             form.save()
             messages.success(request, "Proyek baru berhasil ditambahkan!")
-            return redirect("main:show_projects")
+            return redirect("main:show_project")
 
     context = {
         "first_name": "Nabila",
@@ -83,7 +83,7 @@ def create_project(request):
     }
     return render(request, "projects_form.html", context)
 
-def get_projects_json(request):
+def get_project_json(request):
     title_query = request.GET.get("title", "").strip()
     projects = Project.objects.all()
 
@@ -104,10 +104,10 @@ def delete_project(request, project_id):
 
         if submitted_key != settings.PORTFOLIO_SECRET_KEY:
             messages.error(request, "Kode rahasia salah! Kamu tidak punya akses untuk menghapus proyek.")
-            return redirect("main:show_projects")
+            return redirect("main:show_project")
 
         project.delete()
         messages.success(request, "Project berhasil dihapus!")
-        return redirect("main:show_projects")
+        return redirect("main:show_project")
 
-    return redirect("main:show_projects")
+    return redirect("main:show_project")

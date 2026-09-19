@@ -1,36 +1,36 @@
-{% extends 'base.html' %}
-{% block content %}
-<main class="max-w-5xl mx-auto w-full px-7 py-7 md:px-5">
-    <section id="experience" class="font-mono text-ink">
-        <h2 class="mb-10 drop-shadow-[0_0_5px_var(--color-primary)]">
-            ~/<span class="text-primary text-lg font-bold neon-blink">experience</span>
-        </h2>
-        <p class="typing-text text-accent1" style="--chars:22">$ cat experiences.log</p>
-        {% if experience_list %}
-        <p>My experiences so far.</p>
-        {% endif %}
-        <div class="pt-6 pb-15 flex flex-col gap-4">
-            {% for experience in experience_list %}
-            <div class="exp-card">
-                <div class="exp-header">
-                    <p class="exp-title">{{ experience.title }}</p>
-                    <p class="exp-category">{{ experience.get_category_display }}</p>
-                </div>
-                <div class="exp-time">
-                    {% if experience.is_ongoing %}
-                    <p>{{ experience.started_at }} - Present</p>
-                    {% elif experience.is_blank_start %}
-                    <p>{{ experience.ended_at }}</p>
-                    {% else %}
-                    <p>{{ experience.started_at }} - {{ experience.ended_at }}</p>
-                    {% endif %}
-                </div>
-                <div class="exp-description"><p>{{ experience.description }}</p></div>
-            </div>
-            {% empty %}
-            <p>No experiences have been added yet.</p>
-            {% endfor %}
+{% extends 'base_section.html' %}
+
+{% block meta %} 
+<title>{{ first_name }}'s Experience</title>
+{% endblock meta %}
+{% block section_id %}experience{% endblock section_id %}
+{% block section_name %}experience{% endblock section_name %}
+
+{% block section_content %}
+<p class="typing-text text-accent1" style="--chars:22">$ cat experiences.log</p>
+{% if experience_list %}
+<p>My experiences so far.</p>
+{% endif %}
+<div class="pt-6 pb-15 flex flex-col gap-4">
+    {% for experience in experience_list %}
+    <div class="exp-card">
+        <div class="exp-header">
+            <p class="exp-title">{{ experience.title }}</p>
+            <p class="exp-category">{{ experience.get_category_display }}</p>
         </div>
-    </section>
-</main>
-{% endblock content %}
+        <div class="exp-time">
+            {% if experience.is_ongoing %}
+            <p>{{ experience.started_at }} - Present</p>
+            {% elif experience.is_blank_start %}
+            <p>{{ experience.ended_at }}</p>
+            {% else %}
+            <p>{{ experience.started_at }} - {{ experience.ended_at }}</p>
+            {% endif %}
+        </div>
+        <div class="exp-description"><p>{{ experience.description }}</p></div>
+    </div>
+    {% empty %}
+    <p>No experiences have been added yet.</p>
+    {% endfor %}
+</div>
+{% endblock section_content %}

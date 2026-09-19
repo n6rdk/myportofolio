@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block meta %}
-    <title>Add Project - {{ name }}</title>
+    <title>project - {{ first_name }}</title>
 {% endblock meta %}
 {% block content %}
 <main>
@@ -17,7 +17,7 @@
                 </div>
             {% endif %}
 
-            <h1>Add New Projects</h1>
+            <h1>Add New project</h1>
 
             <form
                 id="project-form"
@@ -44,7 +44,7 @@
                     class="button"
                     popovertarget="project-secret-modal"
                     popovertargetaction="show">Tambah Project</button>
-                <a href="{% url 'main:show_projects' %}"class="button button-secondary">Batal</a>
+                <a href="{% url 'main:show_project' %}"class="button button-secondary">Batal</a>
             </form>
 
             <div
