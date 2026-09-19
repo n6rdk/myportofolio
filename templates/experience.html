@@ -7,11 +7,11 @@
 {% block section_name %}experience{% endblock section_name %}
 
 {% block section_content %}
-<p class="typing-text text-accent1" style="--chars:22">$ cat experiences.log</p>
+{% include "components/command_typing.html" with text="$ cat experiences.log" %}
 {% if experience_list %}
 <p>My experiences so far.</p>
 {% endif %}
-<div class="pt-6 pb-15 flex flex-col gap-4">
+<div class="mt-10 mb-10 flex flex-col gap-4">
     {% for experience in experience_list %}
     <div class="exp-card">
         <div class="exp-header">

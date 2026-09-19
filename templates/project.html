@@ -1,77 +1,82 @@
 {% extends 'base_section.html' %}
 
-{% block meta %} 
-<title>{{ first_name }}'s project</title>
+{% block meta %}
+    <title>{{ first_name }}'s projects</title>
 {% endblock meta %}
-{% block section_id %}project{% endblock section_id %}
-{% block section_name %}project{% endblock section_name %}
+
+{% block section_id %}projects{% endblock section_id %}
+{% block section_name %}projects{% endblock section_name %}
+
+{% block section_actions %}
+    <form method="get"
+            action="{% url 'main:show_project' %}"
+            class="project-search text-primary text-bold text-lg">
+        <input type="search"
+                name="title"
+                value="{{ title_query }}"
+                placeholder="Search by project name"
+                class="project-search__input"
+                aria-label="Search by project name">
+        <button type="submit" class="button">
+            <iconify-icon icon="lucide:search"></iconify-icon>
+        </button>
+    </form>
+{% endblock section_actions %}
 
 {% block section_content %}
-<section class="experience-section font-mono text-ink" id="experience"> <div class="container"> <p class="section-kicker">Karya yang saya bangun</p>
-        <div class="project-header">
-            <h1>Project</h1>
-            <a href="{% url 'main:create_project' %}"
-                class="button project-add-button">
-                <span aria-hidden="true">+</span>
-                Tambah Proyek
-            </a>
-        </div>
+    {% include "components/command_typing.html" with text="$ ls -la ~/projects" %}
+    {% if project_list %}
+        <p>Projects I involved in.</p>
+    {% endif %}
 
-        <form method="get"
-                action="{% url 'main:show_project' %}"
-                class="project-search text-muted">
-            <input type="search"
-                    name="title"
-                    value="{{ title_query }}"
-                    placeholder="Cari berdasarkan nama proyek"
-                    class="project-search__input"
-                    aria-label="Cari berdasarkan nama proyek">
-            <button type="submit" class="button">Cari</button>
-        </form>
-
-        {% if messages %}
-            <div class="messages-container">
-                {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }}">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
-
-        <div class="experience-grid project-grid">
-            {% for project in project_list %}
-                <article class="experience-card">
-                    {% if project.project_image_url %}
-                        <img src="{{ project.project_image_url }}"
-                                alt="Gambar {{ project.title }}"
-                                class="project-image">
-                    {% endif %}
-
-                    <h2>{{ project.title }}</h2>
-                    <span class="experience-category">{{ project.tech_stack }}</span>
-                    <p class="experience-description">{{ project.description }}</p>
-
-                    <div class="project-card-actions">
-                        <div class="project-actions">
-                            {% if project.project_url %}
-                                <a href="{{ project.project_url }}" class="button">
-                                    Lihat Project
-                                </a>
-                            {% endif %}
-
-                            {% include "components/project_delete_modal.html" with project=project %}
-                        </div>
-                    </div>
-                </article>
-            {% empty %}
-                {% if title_query %}
-                    <p class="empty-state">Tidak ada proyek dengan nama tersebut.</p>
-                {% else %}
-                    <p class="empty-state">Belum ada proyek yang ditambahkan.</p>
+    <div class="mt-10 mb-10 experience-grid project-grid">
+        {% for project in project_list %}
+            <article class="project-card">
+                {% include "components/project_delete_modal.html" with project=project %}
+                
+                {% if project.project_image_url %}
+                    <img src="{{ project.project_image_url }}"
+                            alt="{{ project.title }} image"
+                            class="project-image">
                 {% endif %}
+                
+                <div class="project-title">{{ project.title }}</div>
+                <span class="exp-category">{{ project.tech_stack }}</span>
+                <p class="exp-description">{{ project.description }}</p>
+
+                    <div class="project-actions">
+                        {% if project.project_url %}
+                            <a href="{{ project.project_url }}" class="btn1 text-accent2 border-accent2 hover:bg-accent2 hover:text-bg shadow-accent2">
+                                <span>LIVE SITE</span>
+                                <iconify-icon icon="lucide:arrow-up-right"></iconify-icon>
+                            </a>
+                        {% endif %}
+                    </div>
+            </article>
+        {% empty %}
+            {% if title_query %}
+                <p class="empty-state">Project not found.</p>
+            {% else %}
+                <p class="empty-state">No projects have been added yet.</p>
+            {% endif %}
+        {% endfor %}
+    </div>
+    <div class="mt-5 mb-3 justify-self-center">
+        <a href="{% url 'main:create_project' %}"
+            class="btn1">
+            <span aria-hidden="true">+</span>
+            Add Project
+        </a>
+    </div>
+
+    {% if messages %}
+        <div class="messages-container pt-5 pb-2">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
             {% endfor %}
         </div>
-    </div>
-</section>
+    {% endif %}
+
 {% endblock section_content %}

@@ -1,9 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
 <section id="{% block section_id %}{% endblock %}" class="font-mono text-ink">
-    <h2 class="mb-10 drop-shadow-[0_0_5px_var(--color-primary)]">
-        ~/<span class="text-primary text-lg font-bold neon-blink">{% block section_name %}{% endblock %}</span>
-    </h2>
+    <div class="mb-10 flex flex-wrap items-center justify-between gap-4">
+        <h2 class="drop-shadow-[0_0_5px_var(--color-primary)]">
+            ~/<span class="text-primary text-lg font-bold neon-blink">{% block section_name %}{% endblock %}</span>
+        </h2>
+        {% block section_actions %}{% endblock %}
+    </div>
     {% block section_content %}{% endblock %}
 </section>
 {% endblock content %}
