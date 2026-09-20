@@ -4,6 +4,18 @@
     <title>{{ first_name }}'s projects</title>
 {% endblock meta %}
 
+{% block section_messages %}
+    {% if messages %}
+        <div class="messages-container pt-5 pb-2">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock section_messages %}
+
 {% block section_id %}projects{% endblock section_id %}
 {% block section_name %}projects{% endblock section_name %}
 
@@ -68,15 +80,5 @@
             Add Project
         </a>
     </div>
-
-    {% if messages %}
-        <div class="messages-container pt-5 pb-2">
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }}">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        </div>
-    {% endif %}
 
 {% endblock section_content %}

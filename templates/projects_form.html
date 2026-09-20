@@ -1,102 +1,101 @@
-{% extends "base.html" %}
+{% extends 'base_section.html' %}
+
 {% block meta %}
-    <title>project - {{ first_name }}</title>
+    <title>Add New Project(s)</title>
 {% endblock meta %}
-{% block content %}
-<main>
-    <section class="experience-section font-mono text-ink">
-        <div class="container">
 
-            {% if messages %}
-                <div class="messages-container">
-                    {% for message in messages %}
-                        <div class="alert alert-{{ message.tags }}">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
+{% block section_messages %}
+    {% if messages %}
+        <div class="messages-container pt-5 pb-2">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
                 </div>
-            {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock section_messages %}
 
-            <h1>Add New project</h1>
+{% block section_id %}add-project{% endblock section_id %}
+{% block section_name %}projects{% endblock section_name %}
 
-            <form
-                id="project-form"
-                method="post"
-                action="{% url 'main:create_project' %}"
-                class="project-form" >
-                {% csrf_token %}
-                {% for field in form %}
-                    <div class="form-group">
-                        <label for="{{ field.id_for_label }}">
-                            {{ field.label }}
-                        </label>
+{% block section_content %}
+    {% include "components/command_typing.html" with text="$ mkdir new-project" %}
+    <form
+        id="project-form"
+        method="post"
+        action="{% url 'main:create_project' %}"
+        class="project-form" >
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">
+                    {{ field.label }}
+                </label>
 
-                        {{ field }}
+                {{ field }}
 
-                        {% for error in field.errors %}
-                            <p class="form-error">{{ error }}</p>
-                        {% endfor %}
-                    </div>
+                {% for error in field.errors %}
+                    <p class="form-error">{{ error }}</p>
                 {% endfor %}
+            </div>
+        {% endfor %}
 
+        <button
+            type="button"
+            class="btn1"
+            popovertarget="project-secret-modal"
+            popovertargetaction="show">Add Project</button>
+        <a href="{% url 'main:show_project' %}"class="btn1 text-accent1 border-accent1 hover:bg-accent1 hover:text-bg shadow-accent1">Cancel</a>
+    </form>
+
+    <div
+        id="project-secret-modal"
+        class="project-delete-modal"
+        popover>
+        <button
+            type="button"
+            class="project-delete-modal__backdrop"
+            popovertarget="project-secret-modal"
+            popovertargetaction="hide"
+            aria-label="Close"
+        ></button>
+        <div class="project-delete-modal__content">
+            <button
+                type="button"
+                class="project-delete-modal__close"
+                popovertarget="project-secret-modal"
+                popovertargetaction="hide"
+                aria-label="Close">×</button>
+            <h2>Add this project?</h2>
+            <p>Enter the secret code to add a new project.</p>
+            <div class="form-group mt-2">
+                <input
+                    type="password"
+                    name="secret_key"
+                    id="secret_key"
+                    placeholder="Enter the secret code"
+                    form="project-form"
+                    required>
+            </div>
+
+            <div class="project-delete-modal__actions">
                 <button
                     type="button"
-                    class="button"
+                    class="btn2"
                     popovertarget="project-secret-modal"
-                    popovertargetaction="show">Tambah Project</button>
-                <a href="{% url 'main:show_project' %}"class="button button-secondary">Batal</a>
-            </form>
+                    popovertargetaction="hide">
+                    Cancel
+                </button>
 
-            <div
-                id="project-secret-modal"
-                class="project-delete-modal"
-                popover>
                 <button
-                    type="button"
-                    class="project-delete-modal__backdrop"
-                    popovertarget="project-secret-modal"
-                    popovertargetaction="hide"
-                    aria-label="Close"
-                ></button>
-                <div class="project-delete-modal__content">
-                    <button
-                        type="button"
-                        class="project-delete-modal__close"
-                        popovertarget="project-secret-modal"
-                        popovertargetaction="hide"
-                        aria-label="Close">×</button>
-                    <h2>Tambah Project?</h2>
-                    <p>Masukkan kode rahasia untuk menambahkan project baru.</p>
-                    <div class="form-group">
-                        <label for="secret_key">Kode Rahasia</label>
-                        <input
-                            type="password"
-                            name="secret_key"
-                            id="secret_key"
-                            placeholder="Masukkan kode rahasia"
-                            form="project-form"
-                            required>
-                    </div>
-
-                    <div class="project-delete-modal__actions">
-                        <button
-                            type="button"
-                            class="button button-secondary"
-                            popovertarget="project-secret-modal"
-                            popovertargetaction="hide">
-                            Batal
-                        </button>
-
-                        <button
-                            type="submit"
-                            class="button"
-                            form="project-form">
-                            Tambah Project
-                        </button>
-                    </div>
-                </div>
+                    type="submit"
+                    class="btn2 bg-primary"
+                    form="project-form">
+                    Add project
+                </button>
             </div>
         </div>
-    </section>
-</main>
-{% endblock content %}
+    </div>
+</div>
+{% endblock section_content %}

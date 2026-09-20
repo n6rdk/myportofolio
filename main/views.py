@@ -67,12 +67,12 @@ def create_project(request):
         submitted_key = header_key or form_key
 
         if submitted_key != settings.PORTFOLIO_SECRET_KEY:
-            messages.error(request, "Kode rahasia salah! Kamu tidak punya akses untuk menambah proyek.")
+            messages.error(request, "Incorrect secret code! You do not have access to add projects.")
             return redirect("main:create_project")
 
         if form.is_valid():
             form.save()
-            messages.success(request, "Proyek baru berhasil ditambahkan!")
+            messages.success(request, "New project successfully added!")
             return redirect("main:show_project")
 
     context = {
@@ -103,11 +103,11 @@ def delete_project(request, project_id):
         submitted_key = header_key or form_key
 
         if submitted_key != settings.PORTFOLIO_SECRET_KEY:
-            messages.error(request, "Kode rahasia salah! Kamu tidak punya akses untuk menghapus proyek.")
+            messages.error(request, "Incorrect secret code! You do not have access to delete the project.")
             return redirect("main:show_project")
 
         project.delete()
-        messages.success(request, "Project berhasil dihapus!")
+        messages.success(request, "Project successfully deleted!")
         return redirect("main:show_project")
 
     return redirect("main:show_project")

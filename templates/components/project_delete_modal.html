@@ -16,34 +16,33 @@
             class="project-delete-modal__backdrop"
             popovertarget="delete-project-{{ project.id }}"
             popovertargetaction="hide"
-            aria-label="Tutup konfirmasi hapus"></button>
+            aria-label="Close delete confirmation"></button>
     <div class="project-delete-modal__content">
         <button type="button"
                 class="project-delete-modal__close"
                 popovertarget="delete-project-{{ project.id }}"
                 popovertargetaction="hide"
-                aria-label="Tutup konfirmasi hapus">×</button>
-        <h2 id="delete-project-title-{{ project.id }}">Hapus Projek?</h2>
+                aria-label="Close delete confirmation">×</button>
+        <h2 id="delete-project-title-{{ project.id }}" class="text-danger">Delete this project?</h2>
         <p>
-            Apakah Anda yakin ingin menghapus
-            <strong>{{ project.title }}</strong>?
+            Are you sure you want to delete
+            <strong class="text-primary">{{ project.title }}</strong>?
         </p>
         <form method="post" action="{% url 'main:delete_project' project.id %}">
             {% csrf_token %}
-            <div class="form-group">
-                <label for="secret_key_{{ project.id }}">Kode Rahasia</label>
+            <div class="form-group mt-2">
                 <input type="password"
                        name="secret_key"
                        id="secret_key_{{ project.id }}"
-                       placeholder="Masukkan kode rahasia"
+                       placeholder="Enter the secret code"
                        required>
             </div>
             <div class="project-delete-modal__actions">
                 <button type="button"
-                        class="button button-secondary"
+                        class="btn2"
                         popovertarget="delete-project-{{ project.id }}"
-                        popovertargetaction="hide">Batal</button>
-                <button type="submit" class="button button-danger">Ya, Hapus</button>
+                        popovertargetaction="hide">Cancel</button>
+                <button type="submit" class="btn2 btn2-danger">Delete</button>
             </div>
         </form>
     </div>
