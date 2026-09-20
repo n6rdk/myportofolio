@@ -44,30 +44,40 @@
     <div class="mt-10 mb-10 experience-grid project-grid">
         {% for project in project_list %}
             <article class="project-card">
-                {% include "components/project_delete_modal.html" with project=project %}
-                
                 {% if project.project_image_url %}
                     <img src="{{ project.project_image_url }}"
                             alt="{{ project.title }} image"
                             class="project-image">
                 {% endif %}
-                
+
                 <div class="project-title">{{ project.title }}</div>
                 <span class="exp-category">{{ project.tech_stack }}</span>
                 <p class="exp-description">{{ project.description }}</p>
 
                 <div class="project-actions">
-                    <a href="{% url 'main:edit_project' project.pk %}" class="btn1">
-                        <iconify-icon icon="lucide:pencil"></iconify-icon>
-                        <span>EDIT</span>
-                    </a>
-
                     {% if project.project_url %}
                         <a href="{{ project.project_url }}" class="btn1 text-accent2 border-accent2 hover:bg-accent2 hover:text-bg shadow-accent2">
                             <span>LIVE SITE</span>
                             <iconify-icon icon="lucide:arrow-up-right"></iconify-icon>
                         </a>
                     {% endif %}
+
+                    <div class="flex gap-3 ml-auto">
+                        <a href="{% url 'main:edit_project' project.pk %}"
+                        class="exp-action"
+                        aria-label="Edit {{ project.title }}"
+                        title="Edit">
+                            <iconify-icon icon="lucide:pencil"></iconify-icon>
+                        </a>
+                        <button type="button"
+                                class="exp-action exp-action--danger"
+                                popovertarget="delete-project-{{ project.id }}"
+                                aria-label="Delete {{ project.title }}"
+                                title="Delete">
+                            <iconify-icon icon="lucide:trash-2"></iconify-icon>
+                        </button>
+                        {% include "components/project_delete_modal.html" with project=project %}
+                    </div>
                 </div>
             </article>
         {% empty %}
