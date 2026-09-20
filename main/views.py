@@ -97,7 +97,6 @@ def delete_project(request, project_id):
     project = get_object_or_404(Project, pk=project_id)
 
     if request.method == "POST":
-        # Cek secret key dulu
         header_key = request.headers.get("X-Secret-Key")
         form_key = request.POST.get("secret_key")
         submitted_key = header_key or form_key
@@ -111,3 +110,28 @@ def delete_project(request, project_id):
         return redirect("main:show_project")
 
     return redirect("main:show_project")
+
+def edit_project(request, project_id):
+    project = get_object_or_404(Project, pk=project_id)
+    form = ProjectForm(request.POST or None, instance=project)
+
+    if request.method == "POST":
+        header_key = request.headers.get("X-Secret-Key")
+        form_key = request.POST.get("secret_key")
+        submitted_key = header_key or form_key
+
+        if submitted_key != settings.PORTFOLIO_SECRET_KEY:
+            messages.error(request, "Incorrect secret code! You do not have access to edit projects.")
+        elif form.is_valid():
+            form.save()
+            messages.success(request, "Project successfully updated!")
+            return redirect("main:show_project")
+
+    context = {
+        "first_name": "Nabila",
+        "middle_name": "Oktavia",
+        "last_name": "Ramadhani",
+        "form": form,
+        "project": project,
+    }
+    return render(request, "projects_form.html", context)

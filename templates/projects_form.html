@@ -1,7 +1,7 @@
 {% extends 'base_section.html' %}
 
 {% block meta %}
-    <title>Add New Project(s)</title>
+    <title>{% if project %}Edit Project{% else %}Add New Project(s){% endif %}</title>
 {% endblock meta %}
 
 {% block section_messages %}
@@ -16,16 +16,21 @@
     {% endif %}
 {% endblock section_messages %}
 
-{% block section_id %}add-project{% endblock section_id %}
+{% block section_id %}{% if project %}edit-project{% else %}add-project{% endif %}{% endblock section_id %}
 {% block section_name %}projects{% endblock section_name %}
 
 {% block section_content %}
-    {% include "components/command_typing.html" with text="$ mkdir new-project" %}
+    {% if project %}
+        {% include "components/command_typing.html" with text="$ vim project.md" %}
+    {% else %}
+        {% include "components/command_typing.html" with text="$ mkdir new-project" %}
+    {% endif %}
+
     <form
         id="project-form"
         method="post"
-        action="{% url 'main:create_project' %}"
-        class="project-form" >
+        action="{% if project %}{% url 'main:edit_project' project.pk %}{% else %}{% url 'main:create_project' %}{% endif %}"
+        class="project-form">
         {% csrf_token %}
         {% for field in form %}
             <div class="form-group">
@@ -45,8 +50,11 @@
             type="button"
             class="btn1"
             popovertarget="project-secret-modal"
-            popovertargetaction="show">Add Project</button>
-        <a href="{% url 'main:show_project' %}"class="btn1 text-accent1 border-accent1 hover:bg-accent1 hover:text-bg shadow-accent1">Cancel</a>
+            popovertargetaction="show">
+            {% if project %}Save Changes{% else %}Add Project{% endif %}
+        </button>
+        <a href="{% url 'main:show_project' %}"
+           class="btn1 text-accent1 border-accent1 hover:bg-accent1 hover:text-bg shadow-accent1">Cancel</a>
     </form>
 
     <div
@@ -67,8 +75,14 @@
                 popovertarget="project-secret-modal"
                 popovertargetaction="hide"
                 aria-label="Close">×</button>
-            <h2>Add this project?</h2>
-            <p>Enter the secret code to add a new project.</p>
+            <h2>{% if project %}Save changes?{% else %}Add this project?{% endif %}</h2>
+            <p>
+                {% if project %}
+                    Enter the secret code to update this project.
+                {% else %}
+                    Enter the secret code to add a new project.
+                {% endif %}
+            </p>
             <div class="form-group mt-2">
                 <input
                     type="password"
@@ -92,10 +106,9 @@
                     type="submit"
                     class="btn2 bg-primary"
                     form="project-form">
-                    Add project
+                    {% if project %}Save changes{% else %}Add project{% endif %}
                 </button>
             </div>
         </div>
     </div>
-</div>
 {% endblock section_content %}

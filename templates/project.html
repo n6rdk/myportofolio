@@ -56,14 +56,19 @@
                 <span class="exp-category">{{ project.tech_stack }}</span>
                 <p class="exp-description">{{ project.description }}</p>
 
-                    <div class="project-actions">
-                        {% if project.project_url %}
-                            <a href="{{ project.project_url }}" class="btn1 text-accent2 border-accent2 hover:bg-accent2 hover:text-bg shadow-accent2">
-                                <span>LIVE SITE</span>
-                                <iconify-icon icon="lucide:arrow-up-right"></iconify-icon>
-                            </a>
-                        {% endif %}
-                    </div>
+                <div class="project-actions">
+                    <a href="{% url 'main:edit_project' project.pk %}" class="btn1">
+                        <iconify-icon icon="lucide:pencil"></iconify-icon>
+                        <span>EDIT</span>
+                    </a>
+
+                    {% if project.project_url %}
+                        <a href="{{ project.project_url }}" class="btn1 text-accent2 border-accent2 hover:bg-accent2 hover:text-bg shadow-accent2">
+                            <span>LIVE SITE</span>
+                            <iconify-icon icon="lucide:arrow-up-right"></iconify-icon>
+                        </a>
+                    {% endif %}
+                </div>
             </article>
         {% empty %}
             {% if title_query %}
