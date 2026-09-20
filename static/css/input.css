@@ -9,19 +9,19 @@
     --color-muted: #6B7A8F;
     --color-surface: #121E3A;
     --color-danger: #E03426;
+
     --radius-base: 4px;
+    --font-code: 'JetBrains Mono', monospace;
+    --ease-ui: cubic-bezier(0.42, 0, 0.58, 1);
 }
 
-/* Keyframes stay outside @layer */
 @keyframes typing {
     from { width: 0; }
     to { width: calc(var(--chars) * 1ch); }
 }
 
-@keyframes blink-cursor {
-    0%, 40%, 80% { border-color: var(--color-accent1); }
-    20%, 60% { border-color: transparent; }
-    100% { border-color: transparent; }
+@keyframes hide-cursor {
+    to { border-right-color: transparent; }
 }
 
 @keyframes neon-flicker {
@@ -41,21 +41,25 @@
 @layer components {
 
     /* ---------- Buttons ---------- */
-    .btn1 {
+    .btn1,
+    .btn2 {
         display: inline-flex;
         align-items: center;
+        font-family: var(--font-code);
+        font-weight: 500;
+        font-size: 0.875rem;
+        border-radius: 0.125rem;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 150ms var(--ease-ui);
+    }
+
+    .btn1 {
         gap: 0.5rem;
+        padding: 0.75rem 1.25rem;
         background-color: transparent;
         border: 1px solid var(--color-primary);
         color: var(--color-primary);
-        font-family: 'JetBrains Mono', monospace;
-        font-weight: 500;
-        font-size: 0.875rem;
-        padding: 0.75rem 1.25rem;
-        border-radius: 0.125rem;
-        transition: all 150ms cubic-bezier(0.42, 0, 0.58, 1);
-        text-decoration: none;
-        cursor: pointer;
     }
 
     .btn1:hover {
@@ -63,11 +67,6 @@
         color: var(--color-bg);
         box-shadow: 0 0 15px var(--tw-shadow-color, var(--color-primary));
         transform: translate(3px, -3px);
-    }
-
-    .btn1:active {
-        filter: brightness(0.9);
-        transform: scale(0.95);
     }
 
     .btn1 iconify-icon {
@@ -78,46 +77,38 @@
 
     .btn1:hover iconify-icon {
         color: var(--color-bg);
-        transition: all 150ms cubic-bezier(0.42, 0, 0.58, 1);
+        transition: all 150ms var(--ease-ui);
     }
 
     .btn2 {
-        display: inline-flex;
-        align-items: center;
         gap: 0.25rem;
+        padding: 0.25rem 0.5rem;
         background-color: var(--color-accent1);
         color: var(--color-ink);
-        font-family: 'JetBrains Mono', monospace;
-        font-weight: 500;
-        font-size: 0.875rem;
-        padding: 0.25rem 0.5rem;
-        border-radius: 0.125rem;
-        transition: all 150ms cubic-bezier(0.42, 0, 0.58, 1);
-        text-decoration: none;
-        cursor: pointer;
-    }
-
-    .btn2:active {
-        filter: brightness(0.9);
-        transform: scale(0.95);
     }
 
     .btn2-danger {
         background: var(--color-danger);
     }
 
-    /* ---------- Tag ---------- */
+    .btn1:active,
+    .btn2:active {
+        filter: brightness(0.9);
+        transform: scale(0.95);
+    }
+
+    /* ---------- Tags ---------- */
     .tag {
         display: inline-block;
+        padding: 0.25rem 0.75rem;
         background-color: var(--color-surface);
         -webkit-backdrop-filter: blur(12px);
         backdrop-filter: blur(12px);
         border: 1px solid var(--color-muted);
+        border-radius: 0.125rem;
         color: var(--color-muted);
         font-size: 0.75rem;
         line-height: 1rem;
-        padding: 0.25rem 0.75rem;
-        border-radius: 0.125rem;
         transition: color 200ms ease, border-color 200ms ease;
     }
 
@@ -131,92 +122,48 @@
         --speed: 0.05s;
         --duration: clamp(0.6s, calc(var(--chars) * var(--speed)), 3s);
         display: inline-block;
+        width: 0;
         overflow: hidden;
         white-space: nowrap;
         line-height: 1.2;
         border-right: 2px solid var(--color-accent1);
-        width: 0;
         animation:
             typing var(--duration) steps(var(--chars)) forwards,
             hide-cursor 0s var(--duration) forwards;
     }
 
-    @keyframes typing {
-        to { width: calc(var(--chars) * 1ch); }
-    }
+    .neon-flicker { animation: neon-flicker 3s infinite; }
+    .neon-blink { animation: neon-blink 3s infinite; }
 
-    @keyframes hide-cursor {
-        to { border-right-color: transparent; }
-    }
-
-    @media (max-width: 767px) {
-        .wrap-mobile {
-            white-space: normal;
-            width: auto;
-            border-right: none;
-            animation: none;
-            word-break: break-word;
-        }
-    }
-
-    .neon-flicker {
-        animation: neon-flicker 3s infinite;
-    }
-
-    .neon-blink {
-        animation: neon-blink 3s infinite;
-    }
-
-    /* ---------- Layout ---------- */
-    .page-container {
-        max-width: 960px;
-        margin: 0 auto;
-        padding: 0 1.5rem;
-    }
-
-    .experience-section {
-        padding: 4rem 0;
-        border-top: 1px solid var(--color-muted);
-    }
-
-    .experience-section h1 {
-        margin: 0.4rem 0 1.5rem;
-        font-size: 2rem;
-    }
-
-    .section-kicker {
-        color: var(--color-accent1);
-        font-size: 0.8rem;
-        font-weight: 700;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-    }
-
-    /* ---------- Experience card ---------- */
-    .exp-card {
+    /* ---------- Cards ---------- */
+    .exp-card,
+    .edu-card {
         width: 100%;
+        padding: 1.25rem;
         background-color: var(--color-surface);
         border: 1px solid var(--color-muted);
         border-radius: 0.25rem;
-        padding: 1.25rem;
-        padding-left: 2.5rem;
-        position: relative;
-        overflow: hidden;
-        display: grid;
-        grid-template-columns: 1fr;
-        grid-template-areas: 'header' 'time' 'description';
-        row-gap: 0.25rem;
-        align-items: start;
         transition: border-color 200ms ease, filter 200ms ease;
     }
 
     .exp-card:hover,
-    .exp-card:active {
+    .exp-card:active,
+    .edu-card:hover {
         border-color: var(--color-primary);
         filter: drop-shadow(0 0 5px var(--color-primary));
     }
 
-    /* line decoration */
+    .exp-card {
+        position: relative;
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-areas: 'header' 'time' 'description' 'actions';
+        row-gap: 0.25rem;
+        align-items: start;
+        padding-left: 2.5rem;
+        overflow: hidden;
+    }
+
     .exp-card::before {
         content: '';
         position: absolute;
@@ -229,12 +176,6 @@
         transition: background 200ms ease;
     }
 
-    .exp-card:hover::before,
-    .exp-card:active::before {
-        background: linear-gradient(to bottom, var(--color-primary), transparent);
-    }
-
-    /* dot decoration */
     .exp-card::after {
         content: '';
         position: absolute;
@@ -246,6 +187,11 @@
         z-index: 10;
         background-color: var(--color-muted);
         transition: background-color 200ms ease, box-shadow 200ms ease;
+    }
+
+    .exp-card:hover::before,
+    .exp-card:active::before {
+        background: linear-gradient(to bottom, var(--color-primary), transparent);
     }
 
     .exp-card:hover::after,
@@ -262,51 +208,55 @@
         gap: 1rem;
     }
 
-    .exp-title {
-        font-weight: 700;
-        font-size: 1.125rem;
-        transition: color 200ms ease;
-    }
-
-    .exp-card:hover .exp-title,
-    .exp-card:active .exp-title {
-        color: var(--color-primary);
-    }
-
-    .exp-category {
-        color: var(--color-primary);
-        font-size: 0.875rem;
-        flex-shrink: 0;
-    }
-
     .exp-time {
         grid-area: time;
-        font-size: 0.875rem;
         color: var(--color-accent2);
+        font-size: 0.875rem;
     }
 
     .exp-description {
         grid-area: description;
-        color: rgba(230, 241, 255, 0.8);
+        color: color-mix(in srgb, var(--color-ink) 80%, transparent);
         font-size: 0.875rem;
     }
 
-    /* ---------- Education card ---------- */
+    .exp-category {
+        flex-shrink: 0;
+        color: var(--color-primary);
+        font-size: 0.875rem;
+    }
+
+    .exp-actions {
+        grid-area: actions;
+        justify-self: end;
+        display: flex;
+        gap: 0.75rem;
+        margin-top: 0.5rem;
+    }
+
+    .exp-action {
+        display: inline-flex;
+        padding: 0;
+        color: var(--color-muted);
+        font-size: 1.125rem;
+        cursor: pointer;
+        transition: color 200ms ease;
+    }
+
+    .exp-action:hover,
+    .exp-action:focus-visible {
+        color: var(--color-primary);
+    }
+
+    .exp-action--danger:hover,
+    .exp-action--danger:focus-visible {
+        color: var(--color-danger);
+    }
+
     .edu-card {
-        width: 100%;
-        background-color: var(--color-surface);
-        border: 1px solid var(--color-muted);
-        border-radius: 0.25rem;
-        padding: 1.25rem;
         display: flex;
         flex-direction: column;
         gap: 0.25rem;
-        transition: border-color 200ms ease, filter 200ms ease;
-    }
-
-    .edu-card:hover {
-        border-color: var(--color-primary);
-        filter: drop-shadow(0 0 5px var(--color-primary));
     }
 
     .edu-year {
@@ -314,39 +264,47 @@
         font-size: 0.875rem;
     }
 
+    .edu-major {
+        color: var(--color-muted);
+        font-size: 0.875rem;
+    }
+
+    .exp-title,
     .edu-title {
         font-weight: 700;
         font-size: 1.125rem;
         transition: color 200ms ease;
     }
 
+    .exp-card:hover .exp-title,
+    .exp-card:active .exp-title,
     .edu-card:hover .edu-title {
         color: var(--color-primary);
     }
 
-    .edu-major {
-        color: var(--color-muted);
-        font-size: 0.875rem;
+    /* ---------- Projects ---------- */
+    .project-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 1rem;
     }
 
-    /* ---------- project card ---------- */
     .project-card {
-        padding: 1.25rem;
-        padding-top: 2.75rem;
+        position: relative;
+        padding: 2.75rem 1.25rem 1.25rem;
         background-color: var(--color-surface);
         border: 1px solid var(--color-muted);
         border-radius: var(--radius-base);
-        position: relative;
     }
 
     .project-card-delete {
         position: absolute;
         top: 0.25rem;
         right: 1.1rem;
+        z-index: 1;
+        padding: 0;
         background: transparent;
         border: 0;
-        padding: 0;
-        z-index: 1;
     }
 
     .project-title {
@@ -354,50 +312,11 @@
         font-size: 1.25rem;
     }
 
-    /* ---------- Projects page ---------- */
-
-    .project-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        gap: 1rem;
-    }
-
-    .project-grid .experience-card {
-        display: flex;
-        flex-direction: column;
-    }
-
     .project-image {
         display: block;
         width: 100%;
         height: auto;
-        border: 2px var(--color-muted);
         border-radius: var(--radius-base);
-    }
-
-    .project-search {
-        display: flex;
-        gap: 0.5rem;
-        margin-bottom: 1rem;
-        width: min(100%, 20rem);
-    }
-
-    .project-search__input {
-        width: 100%;
-        min-width: 0;
-        padding: 0.25rem 0.5rem;
-        border: 1px solid var(--color-muted);
-        border-radius: 1px;
-        background: transparent;
-        color: var(--color-ink);
-        font: inherit;
-        font-size: 0.85rem;
-    }
-
-    .project-search__input:focus {
-        outline: 1px solid var(--color-primary);
-        border-color: var(--color-primary);
-        box-shadow: 0 0 0.5rem var(--color-primary);
     }
 
     .project-actions {
@@ -413,14 +332,29 @@
         font-weight: 600;
     }
 
-    .project-actions .experience-status {
-        margin-top: 0;
+    .project-search {
+        display: flex;
+        gap: 0.5rem;
+        width: min(100%, 20rem);
+        margin-bottom: 1rem;
     }
 
-    .project-card-actions {
-        display: flex;
-        flex-direction: column;
-        margin-top: auto;
+    .project-search__input {
+        width: 100%;
+        min-width: 0;
+        padding: 0.25rem 0.5rem;
+        background: transparent;
+        border: 1px solid var(--color-muted);
+        border-radius: 1px;
+        color: var(--color-ink);
+        font: inherit;
+        font-size: 0.85rem;
+    }
+
+    .project-search__input:focus {
+        outline: 1px solid var(--color-primary);
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0.5rem var(--color-primary);
     }
 
     /* ---------- Forms ---------- */
@@ -440,97 +374,111 @@
         font-weight: 500;
     }
 
-    .form-group input,
-    .form-group textarea {
+    .form-group :is(input, textarea, select) {
         width: 100%;
         box-sizing: border-box;
         padding: 0.5rem;
         border: 1px solid var(--color-accent1);
         border-radius: 1px;
         font: inherit;
-        transition:
-            border-color 200ms ease;
+        transition: border-color 200ms ease;
     }
 
-    .form-group input:focus,
-    .form-group textarea:focus {
+    .form-group :is(input, textarea, select):focus {
         outline: 2px solid var(--color-accent1);
         border-color: var(--color-accent1);
         box-shadow: 0 0 0.5rem var(--color-accent1);
     }
 
-    .form-error {
-        color: var(--color-danger);
-        font-size: 0.85rem;
-        margin-top: 0.35rem;
+    .form-group select {
+        background-color: var(--color-bg);
+        color: var(--color-ink);
+        cursor: pointer;
     }
 
-    /* ---------- Modal ---------- */
-    .project-delete-modal {
+    .form-group select option[value=""] {
+        color: var(--color-muted);
+    }
+
+    .form-error {
+        margin-top: 0.35rem;
+        color: var(--color-danger);
+        font-size: 0.85rem;
+    }
+
+    /* ---------- Modals ---------- */
+    .project-delete-modal,
+    .experience-delete-modal {
         display: none;
         position: fixed;
         inset: 0;
+        z-index: 10;
+        align-items: center;
+        justify-content: center;
         width: 100%;
         height: 100%;
         max-width: none;
         max-height: none;
         margin: 0;
         padding: 1rem;
-        border: 0;
         background: transparent;
-        z-index: 10;
-        align-items: center;
-        justify-content: center;
+        border: 0;
     }
 
-    .project-delete-modal:popover-open {
+    .project-delete-modal:popover-open,
+    .experience-delete-modal:popover-open {
         display: flex;
     }
 
-    .project-delete-modal__backdrop {
+    .project-delete-modal__backdrop,
+    .experience-delete-modal__backdrop {
         position: absolute;
         inset: 0;
         width: 100%;
         height: 100%;
-        border: 0;
         padding: 0;
         background: rgba(17, 18, 37, 0.5);
+        border: 0;
         cursor: default;
     }
 
-    .project-delete-modal__content {
+    .project-delete-modal__content,
+    .experience-delete-modal__content {
         position: relative;
         z-index: 1;
         width: min(100%, 480px);
         padding: 1.5rem;
-        background: rgba(18, 30, 58, 0.9);
+        background: color-mix(in srgb, var(--color-surface) 90%, transparent);
         backdrop-filter: blur(10px);
         border: 1px solid var(--color-muted);
         border-radius: var(--radius-base);
         color: var(--color-ink);
     }
 
-    .project-delete-modal__content h2 {
+    .project-delete-modal__content h2,
+    .experience-delete-modal__content h2 {
         margin: 0 0 0.75rem;
-        font-family: 'JetBrains Mono', monospace;
+        font-family: var(--font-code);
         font-size: 1.5rem;
         color: var(--color-ink);
     }
 
-    .project-delete-modal__close {
+    .project-delete-modal__close,
+    .experience-delete-modal__close {
         position: absolute;
         top: 1rem;
         right: 1rem;
-        border: 0;
         padding: 0;
         background: transparent;
+        border: 0;
         color: var(--color-muted);
         font-size: 1.8rem;
         line-height: 1;
         cursor: pointer;
     }
 
-    .project-delete-modal__actions {
+    .project-delete-modal__actions,
+    .experience-delete-modal__actions {
         display: flex;
         justify-content: flex-end;
         gap: 0.75rem;
@@ -547,10 +495,9 @@
 
     .alert {
         padding: 0.5rem 1rem;
-        border-radius: 0;
         background: var(--color-surface);
         border-left: 3px solid var(--color-primary);
-        font-family: 'JetBrains Mono', monospace;
+        font-family: var(--font-code);
         font-size: 0.875rem;
         color: var(--color-ink);
     }
@@ -569,22 +516,18 @@
         color: var(--color-danger);
     }
 
-    .alert-success {
-        border-left-color: var(--color-primary);
+    /* ---------- Mobiles ---------- */
+    @media (max-width: 767px) {
+        .wrap-mobile {
+            width: auto;
+            white-space: normal;
+            word-break: break-word;
+            border-right: none;
+            animation: none;
+        }
     }
 
-    /* ---------- Mobile (keep last so it wins over the rules above) ---------- */
     @media (max-width: 600px) {
-        .project-header {
-            align-items: flex-start;
-            flex-direction: column;
-        }
-
-        .project-add-button {
-            width: 100%;
-            justify-content: center;
-        }
-
         .project-search {
             flex-direction: column;
         }
@@ -593,22 +536,26 @@
             width: 100%;
         }
 
-        .project-delete-modal {
+        .project-delete-modal,
+        .experience-delete-modal {
             align-items: flex-end;
             padding: 0;
         }
 
-        .project-delete-modal__content {
+        .project-delete-modal__content,
+        .experience-delete-modal__content {
             width: 100%;
             padding: 1.25rem;
             border-radius: 4px 4px 0 0;
         }
 
-        .project-delete-modal__actions {
+        .project-delete-modal__actions,
+        .experience-delete-modal__actions {
             flex-direction: column-reverse;
         }
 
-        .project-delete-modal__actions .button {
+        .project-delete-modal__actions .button,
+        .experience-delete-modal__actions .button {
             width: 100%;
             text-align: center;
         }

@@ -1,7 +1,7 @@
 {% extends 'base_section.html' %}
 
 {% block meta %}
-    <title>{% if project %}Edit Project{% else %}Add New Project(s){% endif %}</title>
+    <title>{% if experience %}Edit Experience{% else %}Add New Experience(s){% endif %}</title>
 {% endblock meta %}
 
 {% block section_messages %}
@@ -16,20 +16,20 @@
     {% endif %}
 {% endblock section_messages %}
 
-{% block section_id %}{% if project %}edit-project{% else %}add-project{% endif %}{% endblock section_id %}
-{% block section_name %}projects{% endblock section_name %}
+{% block section_id %}{% if experience %}edit-experience{% else %}add-experience{% endif %}{% endblock section_id %}
+{% block section_name %}experiences{% endblock section_name %}
 
 {% block section_content %}
-    {% if project %}
-        {% include "components/command_typing.html" with text="$ vim project.md" %}
+    {% if experience %}
+        {% include "components/command_typing.html" with text="$ vim experience.log" %}
     {% else %}
-        {% include "components/command_typing.html" with text="$ mkdir new-project" %}
+        {% include "components/command_typing.html" with text="$ echo experience >> experience.log" %}
     {% endif %}
 
     <form
-        id="project-form"
+        id="experience-form"
         method="post"
-        action="{% if project %}{% url 'main:edit_project' project.pk %}{% else %}{% url 'main:create_project' %}{% endif %}"
+        action="{% if experience %}{% url 'main:edit_experience' experience.pk %}{% else %}{% url 'main:create_experience' %}{% endif %}"
         class="project-form">
         {% csrf_token %}
         {% for field in form %}
@@ -50,38 +50,38 @@
         <button
             type="button"
             class="btn1"
-            popovertarget="project-secret-modal"
+            popovertarget="experience-secret-modal"
             popovertargetaction="show">
-            {% if project %}Save Changes{% else %}Add Project{% endif %}
+            {% if experience %}Save Changes{% else %}Add experience{% endif %}
         </button>
-        <a href="{% url 'main:show_project' %}"
+        <a href="{% url 'main:show_experience' %}"
            class="btn1 text-accent1 border-accent1 hover:bg-accent1 hover:text-bg shadow-accent1">Cancel</a>
     </form>
 
     <div
-        id="project-secret-modal"
-        class="project-delete-modal"
+        id="experience-secret-modal"
+        class="experience-delete-modal"
         popover>
         <button
             type="button"
-            class="project-delete-modal__backdrop"
-            popovertarget="project-secret-modal"
+            class="experience-delete-modal__backdrop"
+            popovertarget="experience-secret-modal"
             popovertargetaction="hide"
             aria-label="Close"
         ></button>
-        <div class="project-delete-modal__content">
+        <div class="experience-delete-modal__content">
             <button
                 type="button"
-                class="project-delete-modal__close"
-                popovertarget="project-secret-modal"
+                class="experience-delete-modal__close"
+                popovertarget="experience-secret-modal"
                 popovertargetaction="hide"
                 aria-label="Close">×</button>
-            <h2>{% if project %}Save changes?{% else %}Add this project?{% endif %}</h2>
+            <h2>{% if experience %}Save changes?{% else %}Add this experience?{% endif %}</h2>
             <p>
-                {% if project %}
-                    Enter the secret code to update this project.
+                {% if experience %}
+                    Enter the secret code to update this experience.
                 {% else %}
-                    Enter the secret code to add a new project.
+                    Enter the secret code to add a new experience.
                 {% endif %}
             </p>
             <div class="form-group mt-2">
@@ -90,15 +90,15 @@
                     name="secret_key"
                     id="secret_key"
                     placeholder="Enter the secret code"
-                    form="project-form"
+                    form="experience-form"
                     required>
             </div>
 
-            <div class="project-delete-modal__actions">
+            <div class="experience-delete-modal__actions">
                 <button
                     type="button"
                     class="btn2"
-                    popovertarget="project-secret-modal"
+                    popovertarget="experience-secret-modal"
                     popovertargetaction="hide">
                     Cancel
                 </button>
@@ -106,8 +106,8 @@
                 <button
                     type="submit"
                     class="btn2 bg-primary"
-                    form="project-form">
-                    {% if project %}Save changes{% else %}Add project{% endif %}
+                    form="experience-form">
+                    {% if experience %}Save changes{% else %}Add experience{% endif %}
                 </button>
             </div>
         </div>

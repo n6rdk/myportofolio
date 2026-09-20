@@ -30,6 +30,79 @@ def show_experience(request):
     }
     return render(request, "experience.html", context)
 
+def create_experience(request):
+    form = ExperienceForm(request.POST or None)
+    
+    if request.method == "POST":
+        header_key = request.headers.get("X-Secret-Key")
+        form_key = request.POST.get("secret_key")
+        submitted_key = header_key or form_key
+
+        if submitted_key != settings.PORTFOLIO_SECRET_KEY:
+            messages.error(request, "Incorrect secret code! You do not have access to add experiences.")
+            return redirect("main:create_experience")
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, "New experience successfully added!")
+            return redirect("main:show_experience")
+
+    context = {
+        "first_name": "Nabila",
+        "middle_name": "Oktavia",
+        "last_name": "Ramadhani",
+        "form": form,
+    }
+    return render(request, "experience_form.html", context)
+
+def get_experience_json(request):
+    experiences = Experience.objects.all()
+    experiences_json = serializers.serialize("json", experiences)
+    return HttpResponse(experiences_json, content_type="application/json")
+
+def delete_experience(request, experience_id):
+    experience = get_object_or_404(Experience, pk=experience_id)
+
+    if request.method == "POST":
+        header_key = request.headers.get("X-Secret-Key")
+        form_key = request.POST.get("secret_key")
+        submitted_key = header_key or form_key
+
+        if submitted_key != settings.PORTFOLIO_SECRET_KEY:
+            messages.error(request, "Incorrect secret code! You do not have access to delete experience.")
+            return redirect("main:show_experience")
+
+        experience.delete()
+        messages.success(request, "Experience successfully deleted!")
+        return redirect("main:show_experience")
+
+    return redirect("main:show_project")
+
+def edit_experience(request, experience_id):
+    experience = get_object_or_404(Experience, pk=experience_id)
+    form = ExperienceForm(request.POST or None, instance=experience)
+
+    if request.method == "POST":
+        header_key = request.headers.get("X-Secret-Key")
+        form_key = request.POST.get("secret_key")
+        submitted_key = header_key or form_key
+
+        if submitted_key != settings.PORTFOLIO_SECRET_KEY:
+            messages.error(request, "Incorrect secret code! You do not have access to edit experience.")
+        elif form.is_valid():
+            form.save()
+            messages.success(request, "Experience successfully updated!")
+            return redirect("main:show_experience")
+
+    context = {
+        "first_name": "Nabila",
+        "middle_name": "Oktavia",
+        "last_name": "Ramadhani",
+        "form": form,
+        "experience": experience,
+    }
+    return render(request, "experience_form.html", context)
+
 def show_skill(request):
     context = {
         "first_name": "Nabila",
@@ -39,6 +112,58 @@ def show_skill(request):
     }
     return render(request, "skill.html", context)
 
+def get_project_json(request):
+    title_query = request.GET.get("title", "").strip()
+    projects = Project.objects.all()
+
+    if title_query:
+        projects = projects.filter(title__icontains=title_query)
+
+    projects_json = serializers.serialize("json", projects)
+    return HttpResponse(projects_json, content_type="application/json")
+
+def delete_project(request, project_id):
+    project = get_object_or_404(Project, pk=project_id)
+
+    if request.method == "POST":
+        header_key = request.headers.get("X-Secret-Key")
+        form_key = request.POST.get("secret_key")
+        submitted_key = header_key or form_key
+
+        if submitted_key != settings.PORTFOLIO_SECRET_KEY:
+            messages.error(request, "Incorrect secret code! You do not have access to delete the project.")
+            return redirect("main:show_project")
+
+        project.delete()
+        messages.success(request, "Project successfully deleted!")
+        return redirect("main:show_project")
+
+    return redirect("main:show_project")
+
+def edit_project(request, project_id):
+    project = get_object_or_404(Project, pk=project_id)
+    form = ProjectForm(request.POST or None, instance=project)
+
+    if request.method == "POST":
+        header_key = request.headers.get("X-Secret-Key")
+        form_key = request.POST.get("secret_key")
+        submitted_key = header_key or form_key
+
+        if submitted_key != settings.PORTFOLIO_SECRET_KEY:
+            messages.error(request, "Incorrect secret code! You do not have access to edit projects.")
+        elif form.is_valid():
+            form.save()
+            messages.success(request, "Project successfully updated!")
+            return redirect("main:show_project")
+
+    context = {
+        "first_name": "Nabila",
+        "middle_name": "Oktavia",
+        "last_name": "Ramadhani",
+        "form": form,
+        "project": project,
+    }
+    return render(request, "projects_form.html", context)
 def show_project(request):
     json_response = get_project_json(request)
 

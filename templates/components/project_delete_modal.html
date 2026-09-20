@@ -1,11 +1,10 @@
-
-    <button type="button"
-            class="project-card-delete text-muted text-bold text-3xl cursor-pointer"
-            popovertarget="delete-project-{{ project.id }}"
-            aria-label="Delete {{ project.title }}"
-            title="delete project">
-        ×
-    </button>
+<button type="button"
+        class="project-card-delete text-muted text-bold text-3xl cursor-pointer"
+        popovertarget="delete-project-{{ project.id }}"
+        aria-label="Delete {{ project.title }}"
+        title="delete project">
+    ×
+</button>
 <div id="delete-project-{{ project.id }}"
      class="project-delete-modal"
      popover="auto"

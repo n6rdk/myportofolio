@@ -1,0 +1,42 @@
+
+<div id="delete-experience-{{ experience.id }}"
+     class="experience-delete-modal"
+     popover="auto"
+     role="dialog"
+     aria-modal="true"
+     aria-labelledby="delete-experience-title-{{ experience.id }}">
+    <button type="button"
+            class="experience-delete-modal__backdrop"
+            popovertarget="delete-experience-{{ experience.id }}"
+            popovertargetaction="hide"
+            aria-label="Close delete confirmation"></button>
+    <div class="experience-delete-modal__content">
+        <button type="button"
+                class="experience-delete-modal__close"
+                popovertarget="delete-experience-{{ experience.id }}"
+                popovertargetaction="hide"
+                aria-label="Close delete confirmation">×</button>
+        <h2 id="delete-experience-title-{{ experience.id }}" class="text-danger">Delete this experience?</h2>
+        <p>
+            Are you sure you want to delete
+            <strong class="text-primary">{{ experience.title }}</strong>?
+        </p>
+        <form method="post" action="{% url 'main:delete_experience' experience.id %}">
+            {% csrf_token %}
+            <div class="form-group mt-2">
+                <input type="password"
+                       name="secret_key"
+                       id="secret_key_{{ experience.id }}"
+                       placeholder="Enter the secret code"
+                       required>
+            </div>
+            <div class="experience-delete-modal__actions">
+                <button type="button"
+                        class="btn2"
+                        popovertarget="delete-experience-{{ experience.id }}"
+                        popovertargetaction="hide">Cancel</button>
+                <button type="submit" class="btn2 btn2-danger">Delete</button>
+            </div>
+        </form>
+    </div>
+</div>

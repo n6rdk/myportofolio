@@ -3,34 +3,71 @@
 {% block meta %} 
 <title>{{ first_name }}'s Experience</title>
 {% endblock meta %}
+
+{% block section_messages %}
+    {% if messages %}
+        <div class="messages-container pt-5 pb-2">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock section_messages %}
+
 {% block section_id %}experience{% endblock section_id %}
 {% block section_name %}experience{% endblock section_name %}
 
 {% block section_content %}
-{% include "components/command_typing.html" with text="$ cat experiences.log" %}
-{% if experience_list %}
-<p>My experiences so far.</p>
-{% endif %}
-<div class="mt-10 mb-10 flex flex-col gap-4">
-    {% for experience in experience_list %}
-    <div class="exp-card">
-        <div class="exp-header">
-            <p class="exp-title">{{ experience.title }}</p>
-            <p class="exp-category">{{ experience.get_category_display }}</p>
+    {% include "components/command_typing.html" with text="$ cat experiences.log" %}
+    {% if experience_list %}
+    <p>My experiences so far.</p>
+    {% endif %}
+    <div class="mt-10 mb-10 flex flex-col gap-4">
+        {% for experience in experience_list %}
+        <div class="exp-card">
+            <div class="exp-header">
+                <p class="exp-title">{{ experience.title }}</p>
+                <p class="exp-category">{{ experience.get_category_display }}</p>
+            </div>
+            <div class="exp-time">
+                {% if experience.is_ongoing %}
+                <p>{{ experience.started_at }} - Present</p>
+                {% elif experience.is_blank_start %}
+                <p>{{ experience.ended_at }}</p>
+                {% else %}
+                <p>{{ experience.started_at }} - {{ experience.ended_at }}</p>
+                {% endif %}
+            </div>
+            <div class="exp-description"><p>{{ experience.description }}</p></div>
+            <div class="exp-actions">
+                <a href="{% url 'main:edit_experience' experience.pk %}"
+                class="exp-action"
+                aria-label="Edit {{ experience.title }}"
+                title="Edit">
+                    <iconify-icon icon="lucide:pencil"></iconify-icon>
+                </a>
+                <button type="button"
+                        class="exp-action exp-action--danger"
+                        popovertarget="delete-experience-{{ experience.pk }}"
+                        aria-label="Delete {{ experience.title }}"
+                        title="Delete">
+                    <iconify-icon icon="lucide:trash-2"></iconify-icon>
+                </button>
+                {% include "components/experience_delete_modal.html" with experience=experience %}
+            </div>
         </div>
-        <div class="exp-time">
-            {% if experience.is_ongoing %}
-            <p>{{ experience.started_at }} - Present</p>
-            {% elif experience.is_blank_start %}
-            <p>{{ experience.ended_at }}</p>
-            {% else %}
-            <p>{{ experience.started_at }} - {{ experience.ended_at }}</p>
-            {% endif %}
-        </div>
-        <div class="exp-description"><p>{{ experience.description }}</p></div>
+        {% empty %}
+        <p>No experiences have been added yet.</p>
+        {% endfor %}
     </div>
-    {% empty %}
-    <p>No experiences have been added yet.</p>
-    {% endfor %}
-</div>
+    <div class="mt-5 mb-3 justify-self-center">
+        <a href="{% url 'main:create_experience' %}"
+            class="btn1">
+            <span aria-hidden="true">+</span>
+            Add Experience
+        </a>
+    </div>
+
 {% endblock section_content %}
