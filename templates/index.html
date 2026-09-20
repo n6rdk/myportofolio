@@ -9,7 +9,7 @@
 <section id="about">
     <div class="grid grid-cols-1 flex-col md:grid-cols-[1.3fr_1fr] [grid-template-areas:'identity'_'photo'_'details'] md:[grid-template-areas:'identity_photo'_'details_photo'] gap-y-6 gap-x-12 items-center w-full">
         <div class="[grid-area:identity] font-mono">
-            <p class="text-[0.85rem] tracking-[0.08em] text-accent1 mb-3 typing-text" style="--chars:9">$ whoami</p>
+            <p class=" text-accent1 mb-3 typing-text" style="--chars:9">$ whoami</p>
             <h1 class="text-[clamp(3rem,7vw,5rem)] leading-[0.95] font-bold uppercase text-ink">
                 <span class="text-primary drop-shadow-[0_0_5px_var(--color-primary)] neon-flicker">{{ first_name }}</span>
                 <br>{{ middle_name }}
@@ -27,9 +27,9 @@
         </div>
         <div class="[grid-area:details] hero-details space-y-6">
             <p class="text-base md:text-lg font-sans text-ink leading-relaxed">{{ bio }}</p>
-            <div class="grid grid-cols-2 items-start font-mono">
+            <div class="grid grid-cols-2 items-start font-mono text-[0.75rem]">
                 <div>
-                    <dt class="text-accent1 typing-text" style="--chars:13">$ cat npm.txt</dt>
+                    <dt class=" text-accent1 typing-text" style="--chars:13">$ cat npm.txt</dt>
                     <dd class="text-ink">{{ npm }}</dd>
                 </div>
                 <div>
