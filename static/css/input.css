@@ -38,6 +38,15 @@
     display: none !important;
 }
 
+@keyframes menu-in {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: none; }
+}
+
+#mobile-menu:not(.hidden) {
+    animation: menu-in 200ms ease-out;
+}
+
 @layer components {
 
     /* ---------- Buttons ---------- */
@@ -51,21 +60,30 @@
         border-radius: 0.125rem;
         text-decoration: none;
         cursor: pointer;
-        transition: all 150ms var(--ease-ui);
+        transition: all 250ms var(--ease-ui);
     }
 
     .btn1 {
+        --btn-color: var(--color-primary);
         gap: 0.5rem;
         padding: 0.75rem 1.25rem;
         background-color: transparent;
-        border: 1px solid var(--color-primary);
-        color: var(--color-primary);
+        border: 1px solid var(--btn-color);
+        color: var(--btn-color);
+    }
+
+    .btn1-accent1 {
+        --btn-color: var(--color-accent1);
+    }
+
+    .btn1-accent2 {
+        --btn-color: var(--color-accent2);
     }
 
     .btn1:hover {
-        background-color: var(--color-primary);
+        background-color: var(--btn-color);
         color: var(--color-bg);
-        box-shadow: 0 0 15px var(--tw-shadow-color, var(--color-primary));
+        box-shadow: 0 0 15px var(--btn-color);
         transform: translate(3px, -3px);
     }
 
@@ -240,7 +258,7 @@
         color: var(--color-muted);
         font-size: 1.125rem;
         cursor: pointer;
-        transition: color 200ms ease;
+        transition: color 250ms ease;
     }
 
     .exp-action:hover,
@@ -411,7 +429,6 @@
     .experience-delete-modal {
         display: none;
         position: fixed;
-        inset: 0;
         z-index: 10;
         align-items: center;
         justify-content: center;
@@ -516,24 +533,61 @@
         color: var(--color-danger);
     }
 
+    /* ---------- Mobile nav ---------- */
+    .mobile-nav {
+        display: flex;
+        flex-direction: column;
+        padding: 0.5rem 1.25rem;
+    }
+
+    .mobile-nav a {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.85rem 0;
+        border-bottom: 1px solid color-mix(in srgb, var(--color-muted) 12%, transparent);
+        transition: color 150ms ease, padding-left 150ms ease;
+    }
+
+    .mobile-nav a:last-child {
+        border-bottom: 0;
+    }
+
+    .mobile-nav a::before {
+        content: '>';
+        opacity: 0.5;
+    }
+
+    .mobile-nav a:hover,
+    .mobile-nav a:active {
+        padding-left: 0.5rem;
+    }
+
+    .mobile-nav a:hover::before,
+    .mobile-nav a:active::before,
+    .mobile-nav a.text-primary::before {
+        opacity: 1;
+    }
+
+    .mobile-nav a.text-primary {
+        text-shadow: 0 0 8px var(--color-primary);
+    }
+
     /* ---------- Mobiles ---------- */
-    @media (max-width: 767px) {
+    @media (max-width: 600px) {
         .wrap-mobile {
             width: auto;
             white-space: normal;
             word-break: break-word;
             border-right: none;
-            animation: none;
         }
-    }
 
-    @media (max-width: 600px) {
+        /* modals */
         .project-search {
-            flex-direction: column;
-        }
-
-        .project-search .button {
+            order: -1;
             width: 100%;
+            margin-bottom: 0;
+            align-items: center;
         }
 
         .project-delete-modal,
@@ -545,19 +599,119 @@
         .project-delete-modal__content,
         .experience-delete-modal__content {
             width: 100%;
-            padding: 1.25rem;
-            border-radius: 4px 4px 0 0;
+            padding: 1rem;
+            border-radius: 0;
         }
 
-        .project-delete-modal__actions,
-        .experience-delete-modal__actions {
-            flex-direction: column-reverse;
+        .project-delete-modal__content h2,
+        .experience-delete-modal__content h2 {
+            font-size: 1rem;
         }
 
-        .project-delete-modal__actions .button,
-        .experience-delete-modal__actions .button {
-            width: 100%;
-            text-align: center;
+        .project-delete-modal__content p,
+        .experience-delete-modal__content p {
+            font-size: 0.75rem;
         }
+
+        .project-delete-modal__actions .btn2,
+        .experience-delete-modal__actions .btn2 {
+            font-size: 0.75rem;
+        }
+
+        .project-delete-modal__backdrop,
+        .experience-delete-modal__backdrop {
+            backdrop-filter: blur(2px);
+        }
+
+        /* cards */
+        .exp-card,
+        .edu-card {
+            padding: 1rem;
+        }
+
+        .exp-card {
+            padding-left: 2rem;
+        }
+
+        .exp-card::before {
+            left: 1rem;
+            top: 1rem;
+            bottom: 1rem;
+        }
+
+        .exp-card::after {
+            left: 0.8125rem;
+            top: 0.75rem;
+        }
+
+        .exp-title,
+        .edu-title {
+            font-size: 1rem;
+        }
+
+        .exp-time,
+        .exp-description,
+        .exp-category,
+        .edu-year,
+        .edu-major {
+            font-size: 0.7rem;
+        }
+
+        .exp-action {
+            font-size: 1rem;
+        }
+
+        .project-title {
+            font-size: 1rem;
+        }
+
+        /* forms */
+        .form-group label {
+            font-size: 0.85rem;
+        }
+
+        .form-group :is(input, textarea, select) {
+            padding: 0.4rem;
+            font-size: 0.75rem;
+        }
+
+        .form-error {
+            font-size: 0.75rem;
+        }
+
+        .btn1 {
+            gap: 0.375rem;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.75rem;
+        }
+
+        .btn1 iconify-icon {
+            font-size: 1rem;
+        }
+
+        .btn2 {
+            font-size: 0.75rem;
+        }
+    }
+
+    @media (hover: hover) {
+        .btn1:hover {
+            background-color: var(--btn-color);
+            color: var(--color-bg);
+            box-shadow: 0 0 15px var(--btn-color);
+            transform: translate(3px, -3px);
+        }
+
+        .btn1:hover iconify-icon {
+            color: var(--color-bg);
+            transition: all 150ms var(--ease-ui);
+        }
+    }
+
+    .btn1:active,
+    .btn2:active {
+        filter: brightness(0.8);
+        transform: scale(0.92);
+        transition-duration: 60ms;
     }
 }

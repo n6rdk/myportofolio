@@ -7,28 +7,28 @@
 {% block section_name %}skill{% endblock section_name %}
 
 {% block section_content %}
-{% include "components/command_typing.html" with text="$ ls *.json | xargs cat | jq -s 'add' > skills.json && cat skills.json" %}
-{% if skill_list %}
-<p>A running list of tools I'm learning and leveling up.</p>
-{% endif %}
-<div class="mt-10 mb-10 flex flex-col divide-y divide-muted {% if skill_list %}border-y border-muted{% endif %}">
-    {% for skill in skill_list %}
-    <div class="grid gap-4 py-6 md:grid-template-areas['tech'_'stacks'] md:grid-cols-[1fr_2.5fr] md:items-start">
-        <div class="md:[grid-area:'tech'] flex items-center gap-2.5">
-            <iconify-icon icon="{{ skill.icon }}" class="w-6 h-6 text-primary text-2xl"></iconify-icon>
-            <p class="text-ink">{{ skill.field }}</p>
+    {% include "components/command_typing.html" with text="$ cat skills.json" %}
+    {% if skill_list %}
+    <p>A running list of tools I'm learning and leveling up.</p>
+    {% endif %}
+    <div class="mt-10 mb-10 flex flex-col divide-y divide-muted {% if skill_list %}border-y border-muted{% endif %}">
+        {% for skill in skill_list %}
+        <div class="grid gap-4 py-6 md:grid-template-areas['tech'_'stacks'] md:grid-cols-[1fr_2.5fr] md:items-start">
+            <div class="md:[grid-area:'tech'] flex items-center gap-2.5">
+                <iconify-icon icon="{{ skill.icon }}" class="w-6 h-6 text-primary text-2xl"></iconify-icon>
+                <p class="text-ink">{{ skill.field }}</p>
+            </div>
+            <div class="md:[grid-area:'stacks'] flex flex-wrap gap-2">
+                {% for tech in skill.tech_stack %}
+                <span class="tag">{{ tech }}</span>
+                {% endfor %}
+            </div>
         </div>
-        <div class="md:[grid-area:'stacks'] flex flex-wrap gap-2">
-            {% for tech in skill.tech_stack %}
-            <span class="tag">{{ tech }}</span>
-            {% endfor %}
-        </div>
+        {% empty %}
+        <p class="empty-state">No skills have been added yet.</p>
+        {% endfor %}
     </div>
-    {% empty %}
-    <p class="empty-state">No skills have been added yet.</p>
-    {% endfor %}
-</div>
-{% if skill_list %}
-<p>and more to learn...</p>
-{% endif %}
+    {% if skill_list %}
+    <p>and more to learn...</p>
+    {% endif %}
 {% endblock section_content %}

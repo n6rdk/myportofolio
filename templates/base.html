@@ -14,27 +14,36 @@
 
 <body class="bg-bg antialiased min-h-screen flex flex-col justify-between selection:bg-primary selection:text-bg">
     <header class="sticky top-0 z-50 w-full bg-bg/85 backdrop-blur-md border-b border-muted/15 font-mono text-ink">
-        <div class="max-w-5xl mx-auto flex justify-between items-center py-4 px-5 md:py-5 md:px-5 text-xs md:text-base">
+        <div class="max-w-5xl mx-auto flex justify-between items-center py-4 px-5 md:py-5 md:px-5 text-sm md:text-base">
             <a href="{% url 'main:show_main' %}" class="text-primary">~/Nabila</a>
-            <nav class="text-muted">
-                <a href="{% url 'main:show_main' %}">
-                    /<span class="{% if request.resolver_match.url_name == 'show_main' %}text-primary{% else %}hover:text-primary{% endif %}">profile</span>
-                </a>
-                <a href="{% url 'main:show_experience' %}">
-                    /<span class="{% if request.resolver_match.url_name == 'show_experience' %}text-primary{% else %}hover:text-primary{% endif %}">experience</span>
-                </a>
-                <a href="{% url 'main:show_skill' %}">
-                    /<span class="{% if request.resolver_match.url_name == 'show_skill' %}text-primary{% else %}hover:text-primary{% endif %}">skill</span>
-                </a>
-                <a href="{% url 'main:show_project' %}">
-                    /<span class="{% if request.resolver_match.url_name == 'show_project' %}text-primary{% else %}hover:text-primary{% endif %}">project</span>
-                </a>
+
+            <!-- Desktop nav -->
+            <nav class="hidden md:flex gap-4 text-muted">
+                {% include "components/nav_links.html" %}
+            </nav>
+
+            <!-- Hamburger (mobile only) -->
+            <button id="menu-toggle"
+                    type="button"
+                    class="md:hidden text-primary text-2xl leading-none cursor-pointer"
+                    aria-label="Toggle menu"
+                    aria-expanded="false"
+                    aria-controls="mobile-menu">
+                <iconify-icon id="menu-icon" icon="lucide:menu"></iconify-icon>
+            </button>
+        </div>
+
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-bg/95 border-t border-muted/15">
+            <nav class="mobile-nav max-w-5xl mx-auto text-base text-muted">
+                {% include "components/nav_links.html" %}
             </nav>
         </div>
     </header>
+
     <main class="max-w-5xl mx-auto w-full px-7 py-7 md:px-5">
-    {% block content %} {% endblock content %}
-</main>
+        {% block content %} {% endblock content %}
+    </main>
 
     <footer class="w-full border-t border-muted/15 bg-background py-8 font-mono text-xs text-muted">
         <div class="max-w-5xl mx-auto px-5 flex flex-col md:flex-row justify-between items-center gap-4">
@@ -53,6 +62,19 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        const toggle = document.getElementById('menu-toggle');
+        const menu = document.getElementById('mobile-menu');
+        const icon = document.getElementById('menu-icon');
+
+        toggle.addEventListener('click', () => {
+            const isOpen = !menu.classList.toggle('hidden');
+            toggle.setAttribute('aria-expanded', isOpen);
+            icon.setAttribute('icon', isOpen ? 'lucide:x' : 'lucide:menu');
+        });
+    </script>
+
 </body>
 
 
