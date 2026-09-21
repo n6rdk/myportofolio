@@ -14,6 +14,7 @@ Versi saat ini memuat tiga halaman:
 * **Profile** (halaman utama) — memperkenalkan identitas, latar belakang singkat, riwayat pendidikan, dan bagian kontak.
 * **Experience** — menampilkan pengalaman organisasi, kegiatan volunteer, dan kompetisi yang pernah diikuti.
 * **Skill** — menyajikan field dan tech-stack yang sedang dieksplorasi.
+* **Project** — menampilkan proyek-proyek yang pernah/sedang dikerjakan.
 
 ## Features
 
@@ -23,6 +24,10 @@ Versi saat ini memuat tiga halaman:
 * Integrasi ikon menggunakan Iconify.
 * Navigasi antarbagian menggunakan anchor links.
 * Tautan kontak untuk email, LinkedIn, dan GitHub.
+* Pencarian proyek berdasarkan judul secara real-time melalui query parameter.
+* Endpoint JSON (`/experience/xml` dan `/project/json`) yang menyajikan data pengalaman dan proyek dalam format JSON menggunakan Django serializer.
+* Fitur tambah, ubah, dan hapus data (experience & project) yang dilindungi dengan secret key untuk mencegah perubahan oleh pengguna yang tidak berwenang.
+* Notifikasi pesan (success/error) menggunakan Django messages framework untuk memberi feedback setelah setiap aksi.
 
 ## Tech Stack
 
@@ -30,7 +35,7 @@ Versi saat ini memuat tiga halaman:
 | ------------------- | ------------------------------------------------------ |
 | Django        | Framework web yang digunakan untuk menyusun dan menjalankan situs web                    |           
 | HTML5               | Menentukan struktur dan konten situs web     |
-| Tailwind CSS        | Mengatur sebagian besar layout, spacing, typography, warna, dan responsive design menggunakan utility classes            |
+| Tailwind CSS        | Mengatur layout, spacing, typography, warna, dan responsive design menggunakan utility classes            |
 | CSS3        | Menambahkan styling dan animasi khusus untuk komponen dengan desain kompleks atau komponen yang digunakan berulang melalui `input.css`               |
 | Iconify             | Menyediakan icon yang digunakan                    |
 
@@ -62,6 +67,11 @@ myportofolio/
 │   └── img/
 │       └── self.png
 ├── templates/
+│   ├── components/
+│   │   ├── command_typing.html
+│   │   ├── experience_delete_modal.html
+│   │   ├── nav_links.html
+│   │   └── project_delete_modal.html
 │   ├── base_section.html
 │   ├── base.html
 │   ├── experience_form.html
@@ -158,21 +168,17 @@ Kemudian buka website melalui alamat development server yang diberikan oleh Djan
 
 ### 1)
 
-Ketika pengguna membuka halaman, misalnya /experience/, browser mengirim HTTP request ke server Django. Request ini kemudian diterima oleh urls.py proyek (portofolio/urls.py), yang berperan sebagai pintu gerbang utama dan mendelegasikan semua path selain admin/ ke main/urls.py melalui include("main.urls"). Selanjutnya, urls.py aplikasi main mencocokkan path experience/ dengan pattern yang terdaftar dan memanggil view yang sesuai, yaitu show_experience di main/views.py.
-
-Di dalam view, data statis (seperti nama) disiapkan, sementara data dinamis diambil dari model melalui query ORM Experience.objects.all(). Query ini diterjemahkan menjadi SQL dan dijalankan ke db.sqlite3 sesuai struktur field yang didefinisikan pada model Experience di main/models.py, menghasilkan queryset berisi data pengalaman. Semua data ini kemudian dikumpulkan dalam dictionary context.
-
-View lalu memanggil render(request, "experience.html", context), sehingga Django mengambil file experience.html dari direktori templates/ dan mengisi placeholder ({{ first_name }}) serta menjalankan tag logika ({% for %}) dengan data dari context, menghasilkan HTML jadi. HTML ini dibungkus dalam HttpResponse dan dikirim ke browser, yang menampilkannya sebagai halaman web lengkap dengan aset statis seperti CSS dan gambar. Alur yang sama berlaku untuk halaman lain, yang membedakan hanya view, model, dan template yang digunakan.
+ModelForm membuat form langsung dari model, jadi field, tipe data, dan aturan validasinya (seperti max_length, URLField, dan blank) tidak perlu ditulis ulang. Kita cukup memanggil is_valid() untuk validasi dan save() untuk menyimpan ke database, dan form otomatis ikut menyesuaikan kalau model berubah, sedangkan form HTML manual lebih panjang, rawan tidak sinkron dengan model, dan validasinya mudah terlewat. Adapun `{% csrf_token %}` wajib ada karena browser otomatis menyertakan cookie sesi di setiap request, sehingga situs jahat bisa membuat pengguna yang sedang login mengirim request palsu (serangan CSRF) tanpa disadari. Token acak yang unik ini disisipkan sebagai hidden input dan dicocokkan oleh Django saat POST, sehingga request tanpa token yang valid ditolak dengan error 403.
 
 
 ### 2)
 
-Data untuk bagian portofolio baru sebaiknya disimpan pada model agar terpisah dari template sehingga kode lebih rapi dan mudah dikelola. Dengan adanya model, developer cukup mengupdate perubahan melalui model tanpa harus mengubah template sehingga mengurangi risiko error yang dapat terjadi jika melakukan perubahan data pada template.
+Saat ini, JSON lebih disukai dibandingkan XML pada aplikasi modern (terutama pada arsitektur RESTful API) karena ukurannya yang lebih ringkas, parser yang sangat cepat, dan integrasi yang sangat natural dengan JavaScript di sisi frontend. Ini terlihat pada contoh data Burhan di tutorial: XML harus menulis tag pembuka dan penutup untuk setiap elemen (`<name>Burhan</name>`) plus root element wajib dan prolog, sedangkan JSON cukup pasangan key-value (`"name": "Burhan"`). Hasilnya ukuran data lebih kecil, sehingga lebih hemat bandwidth dan lebih cepat dikirim antara backend dan frontend.
 
 
 ### 3)
 
-`makemigrations` digunakan untuk membuat file migrasi jika membuat model baru atau menambahkan field baru pada sebuah model, sedangkan `migrate` digunakan untuk menerapkan file migrasi tersebut ke database. Contohnya, ketika membuat model Education, saya menjalankan `python manage.py makemigrations` untuk membuat migrasi, kemudian `python manage.py migrate` untuk menambahkan model baru tersebut ke database.
+Saat view seperti `get_experience_json` dipanggil, Django akan mengambil data dari database dengan `Experience.objects.all()`, tapi hasilnya bukan JSON, melainkan kumpulan objek model Python yang strukturnya rumit (punya method, relasi, dan tipe field khusus seperti UUIDField) jadi kalau langsung dikirim sebagai response akan error, karena JSON hanya mengerti tipe data sederhana seperti string, number, boolean, dsb. Oleh karena itu, diperlukan proses serialization lewat `serializers.serialize("json", experiences)`, yang mengubah objek-objek model itu jadi string JSON yang bisa dibaca sistem lain, baru setelah itu dibungkus ke HttpResponse dengan `content_type="application/json"` dan dikirim ke klien. Jadi serialization itu penting karena berfungsi sebagai "penerjemah" dari struktur data internal Django ke format universal yang bisa dipahami JavaScript, aplikasi mobile, atau sistem lain di luar Django.
 
 
 ---
@@ -186,21 +192,24 @@ AI tidak digunakan sebagai pengganti proses pengambilan keputusan desain. Desain
 Tools AI yang digunakan: Gemini, Claude
 
 Log penggunaan AI:
-https://share.gemini.google/KMqQVLRNFXIK
-https://claude.ai/share/9fbb6c5f-f5f3-459d-b2de-c9eaabb30696
+<br>https://share.gemini.google/KMqQVLRNFXIK
+<br>https://claude.ai/share/9fbb6c5f-f5f3-459d-b2de-c9eaabb30696
+<br>https://claude.ai/share/0928bf74-ea00-4a0b-86ba-df0dd40f78a1
 
 ## Peran AI
 
 Beberapa hal yang dibantu oleh AI meliputi:
 
 * Membantu mengonfigurasi framework.
+* Brainstorming desain.
 * Membantu mengonversi plain CSS ke format class Tailwind CSS dan sebaliknya.
 * Membantu memahami implementasi icon.
 * Membantu memahami konsep utility grid pada Tailwind.
 * Membantu mengidentifikasi kemungkinan masalah pada struktur HTML dan styling.
 * Membantu membuat kerangka dan sebagian konten `README.md`.
 * Membantu debugging error yang berkaitan dengan database.
-* Membantu memahami dan membuat model dengan field bertipe data array
+* Membantu memahami dan membuat model dengan field bertipe data array.
+* Membantu memahami konsep-konsep yang ada di pertanyaan reflektif.
 
 ## Keterbatasan AI
 
