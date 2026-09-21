@@ -42,6 +42,8 @@ myportofolio/
 │   ├── migrations/
 │   ├── __init__.py
 │   ├── admin.py
+│   ├── apps.py
+│   ├── forms.py
 │   ├── models.py
 │   ├── tests.py
 │   ├── urls.py
@@ -55,12 +57,18 @@ myportofolio/
 │   └── wsgi.py
 ├── static/
 │   ├── css/
+│   │   ├── input.css
 │   │   └── style.css
 │   └── img/
 │       └── self.png
 ├── templates/
+│   ├── base_section.html
+│   ├── base.html
+│   ├── experience_form.html
 │   ├── experience.html
 │   ├── index.html
+│   ├── project.html
+│   ├── project_form.html
 │   └── skill.html
 ├── .gitignore
 ├── manage.py
@@ -135,11 +143,18 @@ Kemudian buka website melalui alamat development server yang diberikan oleh Djan
 * Menambahkan 3 model baru, yaitu education, experience, dan skill.
 * Membuat unit test untuk skenario aksesibilitas halaman, isolasi data antarhalaman, navigasi antarhalaman, halaman tidak ditemukan, perilaku model, dan kondisi data kosong.
 
+### Week 3
+* Implementasi tutorial 3 (Form dan Data Delivery).
+* Membuat halaman project.
+* Implementasi form dan data delivery pada halaman experience.
+* Menerapkan secret key untuk CRUD pada halaman experience dan project.
+* Membuat hamburger navbar untuk tampilan mobile.
+
 ---
 
 # Jawaban Pertanyaan Reflektif
 
-## Tugas 2
+## Tugas 3
 
 ### 1)
 

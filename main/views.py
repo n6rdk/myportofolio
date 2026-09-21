@@ -163,7 +163,7 @@ def edit_project(request, project_id):
         "form": form,
         "project": project,
     }
-    return render(request, "projects_form.html", context)
+    return render(request, "project_form.html", context)
 def show_project(request):
     json_response = get_project_json(request)
 
@@ -206,7 +206,7 @@ def create_project(request):
         "last_name": "Ramadhani",
         "form": form,
     }
-    return render(request, "projects_form.html", context)
+    return render(request, "project_form.html", context)
 
 def get_project_json(request):
     title_query = request.GET.get("title", "").strip()
@@ -259,4 +259,4 @@ def edit_project(request, project_id):
         "form": form,
         "project": project,
     }
-    return render(request, "projects_form.html", context)
+    return render(request, "project_form.html", context)
