@@ -210,6 +210,7 @@ Beberapa hal yang dibantu oleh AI meliputi:
 * Membantu debugging error yang berkaitan dengan database.
 * Membantu memahami dan membuat model dengan field bertipe data array.
 * Membantu memahami konsep-konsep yang ada di pertanyaan reflektif.
+* Membuat sebagian unit test.
 
 ## Keterbatasan AI
 
