@@ -47,17 +47,27 @@
             </div>
         {% endfor %}
 
+        {% if project %}
+        <button
+            type="submit"
+            class="btn1"
+            form="project-form">
+            Save Changes
+        </button>
+        {% else %}
         <button
             type="button"
             class="btn1"
             popovertarget="project-secret-modal"
             popovertargetaction="show">
-            {% if project %}Save Changes{% else %}Add Project{% endif %}
+            Add Project
         </button>
+        {% endif %}
         <a href="{% url 'main:show_project' %}"
            class="btn1 btn1-accent1">Cancel</a>
     </form>
 
+    {% if not project %}
     <div
         id="project-secret-modal"
         class="project-delete-modal"
@@ -76,14 +86,8 @@
                 popovertarget="project-secret-modal"
                 popovertargetaction="hide"
                 aria-label="Close">×</button>
-            <h2>{% if project %}Save changes?{% else %}Add this project?{% endif %}</h2>
-            <p>
-                {% if project %}
-                    Enter the secret code to update this project.
-                {% else %}
-                    Enter the secret code to add a new project.
-                {% endif %}
-            </p>
+            <h2>Add this project?</h2>
+            <p>Enter the secret code to add a new project.</p>
             <div class="form-group mt-2">
                 <input
                     type="password"
@@ -107,9 +111,10 @@
                     type="submit"
                     class="btn2 bg-primary"
                     form="project-form">
-                    {% if project %}Save changes{% else %}Add project{% endif %}
+                    Add project
                 </button>
             </div>
         </div>
     </div>
+    {% endif %}
 {% endblock section_content %}

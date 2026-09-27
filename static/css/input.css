@@ -84,7 +84,6 @@
         background-color: var(--btn-color);
         color: var(--color-bg);
         box-shadow: 0 0 15px var(--btn-color);
-        transform: translate(3px, -3px);
     }
 
     .btn1 iconify-icon {
@@ -389,6 +388,12 @@
 
     .button-star.is-starred {
         background: var(--color-primary);
+        color: var(--color-bg);
+    }
+
+    .button-star:hover {
+        transition: all 150ms var(--ease-ui);
+        color: var(--color-bg);
     }
 
     .star-count {
@@ -727,7 +732,6 @@
 
         .btn1:hover iconify-icon {
             color: var(--color-bg);
-            transition: all 150ms var(--ease-ui);
         }
     }
 

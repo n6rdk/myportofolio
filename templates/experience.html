@@ -41,6 +41,7 @@
                 {% endif %}
             </div>
             <div class="exp-description"><p>{{ experience.description }}</p></div>
+            {% if user.is_superuser %}
             <div class="exp-actions">
                 <a href="{% url 'main:edit_experience' experience.pk %}"
                 class="exp-action"
@@ -57,11 +58,13 @@
                 </button>
                 {% include "components/experience_delete_modal.html" with experience=experience %}
             </div>
+            {% endif %}
         </div>
         {% empty %}
         <p>No experiences have been added yet.</p>
         {% endfor %}
     </div>
+    {% if user.is_superuser %}
     <div class="mt-5 mb-3 justify-self-center">
         <a href="{% url 'main:create_experience' %}"
             class="btn1">
@@ -69,5 +72,6 @@
             Add Experience
         </a>
     </div>
+    {% endif %}
 
 {% endblock section_content %}

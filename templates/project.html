@@ -44,6 +44,7 @@
     <div class="mt-10 mb-10 experience-grid project-grid">
         {% for project in project_list %}
             <article class="project-card">
+                <div class="pb-3">{% include "components/project_star.html" with project=project %}</div>
                 {% if project.project_image_url %}
                     <img src="{{ project.project_image_url }}"
                             alt="{{ project.title }} image"
@@ -53,8 +54,6 @@
                 <div class="project-title">{{ project.title }}</div>
                 <span class="exp-category">{{ project.tech_stack }}</span>
                 <p class="exp-description">{{ project.description }}</p>
-
-                {% include "components/project_star.html" with project=project %}
                 <div class="project-actions">
                     {% if project.project_url %}
                         <a href="{{ project.project_url }}" class="btn1 btn1-accent2">
@@ -63,7 +62,7 @@
                         </a>
                     {% endif %}
                     
-                    {% if user.is_superuser %}
+                    {% if can_edit %}
                     <div class="flex gap-3 ml-auto">
                         <a href="{% url 'main:edit_project' project.pk %}"
                         class="exp-action"
@@ -71,6 +70,7 @@
                         title="Edit">
                             <iconify-icon icon="lucide:pencil"></iconify-icon>
                         </a>
+                        {% if user.is_superuser %}
                         <button type="button"
                                 class="exp-action exp-action--danger"
                                 popovertarget="delete-project-{{ project.id }}"
@@ -79,6 +79,7 @@
                             <iconify-icon icon="lucide:trash-2"></iconify-icon>
                         </button>
                         {% include "components/project_delete_modal.html" with project=project %}
+                        {% endif %}
                     </div>
                     {% endif %}
                 </div>

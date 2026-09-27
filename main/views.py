@@ -5,11 +5,14 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.core import serializers
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.exceptions import PermissionDenied
 from main.forms import *
 from main.models import *
 from portofolio import settings
+
+def is_editor(user):
+    return user.groups.filter(name="Editor").exists()
 
 def show_main(request):
     last_login = request.COOKIES.get('last_login', 'Belum ada sesi login / Cookie tidak ditemukan')
@@ -38,7 +41,11 @@ def show_experience(request):
     }
     return render(request, "experience.html", context)
 
+@login_required(login_url="/login/")
 def create_experience(request):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+    
     form = ExperienceForm(request.POST or None)
     
     if request.method == "POST":
@@ -68,7 +75,11 @@ def get_experience_json(request):
     experiences_json = serializers.serialize("json", experiences)
     return HttpResponse(experiences_json, content_type="application/json")
 
+@login_required(login_url="/login/")
 def delete_experience(request, experience_id):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+        
     experience = get_object_or_404(Experience, pk=experience_id)
 
     if request.method == "POST":
@@ -84,9 +95,13 @@ def delete_experience(request, experience_id):
         messages.success(request, "Experience successfully deleted!")
         return redirect("main:show_experience")
 
-    return redirect("main:show_project")
+    return redirect("main:show_experience")
 
+@login_required(login_url="/login/")
 def edit_experience(request, experience_id):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+    
     experience = get_object_or_404(Experience, pk=experience_id)
     form = ExperienceForm(request.POST or None, instance=experience)
 
@@ -120,48 +135,6 @@ def show_skill(request):
     }
     return render(request, "skill.html", context)
 
-def delete_project(request, project_id):
-    project = get_object_or_404(Project, pk=project_id)
-
-    if request.method == "POST":
-        header_key = request.headers.get("X-Secret-Key")
-        form_key = request.POST.get("secret_key")
-        submitted_key = header_key or form_key
-
-        if submitted_key != settings.PORTFOLIO_SECRET_KEY:
-            messages.error(request, "Incorrect secret code! You do not have access to delete the project.")
-            return redirect("main:show_project")
-
-        project.delete()
-        messages.success(request, "Project successfully deleted!")
-        return redirect("main:show_project")
-
-    return redirect("main:show_project")
-
-def edit_project(request, project_id):
-    project = get_object_or_404(Project, pk=project_id)
-    form = ProjectForm(request.POST or None, instance=project)
-
-    if request.method == "POST":
-        header_key = request.headers.get("X-Secret-Key")
-        form_key = request.POST.get("secret_key")
-        submitted_key = header_key or form_key
-
-        if submitted_key != settings.PORTFOLIO_SECRET_KEY:
-            messages.error(request, "Incorrect secret code! You do not have access to edit projects.")
-        elif form.is_valid():
-            form.save()
-            messages.success(request, "Project successfully updated!")
-            return redirect("main:show_project")
-
-    context = {
-        "first_name": "Nabila",
-        "middle_name": "Oktavia",
-        "last_name": "Ramadhani",
-        "form": form,
-        "project": project,
-    }
-    return render(request, "project_form.html", context)
 def show_project(request):
     json_response = get_project_json(request)
 
@@ -178,6 +151,9 @@ def show_project(request):
         "last_name": "Ramadhani",
         "project_list": projects,
         "title_query": title_query,
+        "can_edit": request.user.is_authenticated and (
+            is_editor(request.user) or request.user.is_superuser
+        ),
     }
     return render(request, "project.html", context)
 
@@ -223,7 +199,7 @@ def get_project_json(request):
 @login_required(login_url="/login/")
 def delete_project(request, project_id):
     if not request.user.is_superuser:
-            raise PermissionDenied
+        raise PermissionDenied
         
     project = get_object_or_404(Project, pk=project_id)
 
@@ -244,20 +220,14 @@ def delete_project(request, project_id):
 
 @login_required(login_url="/login/")
 def edit_project(request, project_id):
-    if not request.user.is_superuser:
+    if not (is_editor(request.user) or request.user.is_superuser):
             raise PermissionDenied
         
     project = get_object_or_404(Project, pk=project_id)
     form = ProjectForm(request.POST or None, instance=project)
 
     if request.method == "POST":
-        header_key = request.headers.get("X-Secret-Key")
-        form_key = request.POST.get("secret_key")
-        submitted_key = header_key or form_key
-
-        if submitted_key != settings.PORTFOLIO_SECRET_KEY:
-            messages.error(request, "Incorrect secret code! You do not have access to edit projects.")
-        elif form.is_valid():
+        if form.is_valid():
             form.save()
             messages.success(request, "Project successfully updated!")
             return redirect("main:show_project")

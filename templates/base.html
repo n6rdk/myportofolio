@@ -14,11 +14,11 @@
 
 <body class="bg-bg antialiased min-h-screen flex flex-col justify-between selection:bg-primary selection:text-bg">
     <header class="sticky top-0 z-50 w-full bg-bg/85 backdrop-blur-md border-b border-muted/15 font-mono text-ink">
-        <div class="max-w-5xl mx-auto flex justify-between items-center py-4 px-5 md:py-5 md:px-5 text-sm md:text-base">
+        <div class="max-w-5xl mx-auto flex justify-between items-center py-4 px-5 md:py-5 md:px-5 md:text-base">
             <a href="{% url 'main:show_main' %}" class="text-primary">~/Nabila</a>
 
             <!-- Desktop nav -->
-            <nav class="hidden md:flex gap-6 text-muted">
+            <nav class="hidden md:flex items-center gap-3 flex-nowrap text-sm text-muted">
                 {% include "components/nav_links.html" %}
             </nav>
 
