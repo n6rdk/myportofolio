@@ -17,4 +17,8 @@ urlpatterns = [
     path("api/project/", get_project_json, name="get_project_json"),
     path("project/<uuid:project_id>/delete/",delete_project,name="delete_project"),
     path("project/<uuid:project_id>/edit/", edit_project, name="edit_project"),
+    path("register/", register, name="register"),
+    path("login/", login_user, name="login"),
+    path("logout/", logout_user, name="logout"),
+    path("projects/<uuid:project_id>/star/", toggle_star, name="toggle_star"),
 ]

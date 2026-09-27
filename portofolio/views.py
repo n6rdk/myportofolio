@@ -4,6 +4,7 @@ from main.models import *
 
 
 def show_main(request):
+    last_login = request.COOKIES.get('last_login', 'Belum ada sesi login / Cookie tidak ditemukan')
     context = {
         "first_name": "Nabila",
         "middle_name": "Oktavia",
@@ -14,6 +15,7 @@ def show_main(request):
             "CS student at Universitas Indonesia, currently exploring my interests in data science and cybersecurity. I'm a quiet thinker who prefers observing, analyzing, and solving problems behind the scenes."
         ),
         "education_list": Education.objects.all(),
+        "last_login": last_login,
     }
     return render(request, "index.html", context)
 

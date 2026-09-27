@@ -54,6 +54,7 @@
                 <span class="exp-category">{{ project.tech_stack }}</span>
                 <p class="exp-description">{{ project.description }}</p>
 
+                {% include "components/project_star.html" with project=project %}
                 <div class="project-actions">
                     {% if project.project_url %}
                         <a href="{{ project.project_url }}" class="btn1 btn1-accent2">
@@ -61,7 +62,8 @@
                             <iconify-icon icon="lucide:arrow-up-right"></iconify-icon>
                         </a>
                     {% endif %}
-
+                    
+                    {% if user.is_superuser %}
                     <div class="flex gap-3 ml-auto">
                         <a href="{% url 'main:edit_project' project.pk %}"
                         class="exp-action"
@@ -78,6 +80,7 @@
                         </button>
                         {% include "components/project_delete_modal.html" with project=project %}
                     </div>
+                    {% endif %}
                 </div>
             </article>
         {% empty %}
@@ -88,6 +91,8 @@
             {% endif %}
         {% endfor %}
     </div>
+
+    {% if user.is_superuser %}
     <div class="mt-5 mb-3 justify-self-center">
         <a href="{% url 'main:create_project' %}"
             class="btn1">
@@ -95,5 +100,6 @@
             Add Project
         </a>
     </div>
+    {% endif %}
 
 {% endblock section_content %}

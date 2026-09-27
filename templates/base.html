@@ -18,14 +18,14 @@
             <a href="{% url 'main:show_main' %}" class="text-primary">~/Nabila</a>
 
             <!-- Desktop nav -->
-            <nav class="hidden md:flex gap-4 text-muted">
+            <nav class="hidden md:flex gap-6 text-muted">
                 {% include "components/nav_links.html" %}
             </nav>
 
             <!-- Hamburger (mobile only) -->
             <button id="menu-toggle"
                     type="button"
-                    class="md:hidden text-primary text-xl leading-none cursor-pointer"
+                    class="md:hidden text-muted hover:text-primary text-xl leading-none cursor-pointer"
                     aria-label="Toggle menu"
                     aria-expanded="false"
                     aria-controls="mobile-menu">
