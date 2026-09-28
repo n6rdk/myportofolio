@@ -1,6 +1,6 @@
 import json
 from unittest.mock import patch
-
+from django.contrib.auth.models import User, Group
 from django.test import TestCase
 from django.urls import reverse
 
@@ -17,6 +17,14 @@ use_test_secret_key = patch.object(
 
 class MainTest(TestCase):
     def setUp(self):
+        self.superuser = User.objects.create_superuser(username="admin", password="adminpass123")
+
+        self.editor_group, _ = Group.objects.get_or_create(name="Editor")
+        self.editor_user = User.objects.create_user(username="editor", password="editorpass123")
+        self.editor_user.groups.add(self.editor_group)
+
+        self.regular_user = User.objects.create_user(username="regular", password="regularpass123")
+        
         self.education = Education.objects.create(
                             institution="Universitas Indonesia",
                             major="Computer Science",
@@ -220,23 +228,6 @@ class MainTest(TestCase):
         self.client.post(url, {"secret_key": TEST_SECRET_KEY})
         self.assertEqual(Project.objects.count(), 0)
 
-    @use_test_secret_key
-    def test_edit_project_updates_data_with_correct_secret_key(self):
-        url = reverse("main:edit_project", args=[self.project.id])
-
-        response = self.client.post(url, {
-            "title": "Updated Title",
-            "description": self.project.description,
-            "tech_stack": self.project.tech_stack,
-            "project_url": self.project.project_url,
-            "project_image_url": "",
-            "secret_key": TEST_SECRET_KEY,
-        })
-
-        self.project.refresh_from_db()
-        self.assertEqual(self.project.title, "Updated Title")
-        self.assertRedirects(response, reverse("main:show_project"))
-
     # ====== FORM VALIDATION ======
 
     def test_experience_form_requires_start_or_end_date(self):
@@ -271,3 +262,126 @@ class MainTest(TestCase):
         })
 
         self.assertTrue(form.is_valid())
+        
+    # ====== AUTHORIZATION ======
+    def test_edit_project_forbidden_for_authenticated_non_editor(self):
+        self.client.login(username="regular", password="regularpass123")
+        url = reverse("main:edit_project", args=[self.project.id])
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 403)
+
+    def test_edit_project_allowed_for_editor_group_member(self):
+        self.client.login(username="editor", password="editorpass123")
+        url = reverse("main:edit_project", args=[self.project.id])
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "project_form.html")
+
+    def test_edit_project_allowed_for_superuser(self):
+        self.client.login(username="admin", password="adminpass123")
+        url = reverse("main:edit_project", args=[self.project.id])
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "project_form.html")
+
+    def test_edit_project_updates_data_as_editor(self):
+        self.client.login(username="editor", password="editorpass123")
+        url = reverse("main:edit_project", args=[self.project.id])
+
+        response = self.client.post(url, {
+            "title": "Editor Updated Title",
+            "description": self.project.description,
+            "tech_stack": self.project.tech_stack,
+            "project_url": self.project.project_url,
+            "project_image_url": "",
+        })
+
+        self.project.refresh_from_db()
+        self.assertEqual(self.project.title, "Editor Updated Title")
+        self.assertRedirects(response, reverse("main:show_project"))
+
+    def test_edit_project_updates_data_as_superuser(self):
+        self.client.login(username="admin", password="adminpass123")
+        url = reverse("main:edit_project", args=[self.project.id])
+
+        response = self.client.post(url, {
+            "title": "Superuser Updated Title",
+            "description": self.project.description,
+            "tech_stack": self.project.tech_stack,
+            "project_url": self.project.project_url,
+            "project_image_url": "",
+        })
+
+        self.project.refresh_from_db()
+        self.assertEqual(self.project.title, "Superuser Updated Title")
+        self.assertRedirects(response, reverse("main:show_project"))
+    
+    # ====== ADD/EDIT/DELETE BUTTON VISIBILITY ======
+    def test_edit_button_hidden_for_anonymous_user(self):
+        project_response = self.client.get(reverse("main:show_project"))
+        project_edit_url = reverse("main:edit_project", args=[self.project.id])
+        experience_response = self.client.get(reverse("main:show_experience"))
+        experience_edit_url = reverse("main:edit_experience", args=[self.experience.id])
+
+        self.assertNotContains(project_response, f'href="{project_edit_url}"')
+        self.assertNotContains(experience_response, f'href="{experience_edit_url}"')
+
+    def test_edit_button_hidden_for_authenticated_non_editor(self):
+        self.client.login(username="regular", password="regularpass123")
+        project_response = self.client.get(reverse("main:show_project"))
+        project_edit_url = reverse("main:edit_project", args=[self.project.id])
+        experience_response = self.client.get(reverse("main:show_experience"))
+        experience_edit_url = reverse("main:edit_experience", args=[self.experience.id])
+
+        self.assertNotContains(project_response, f'href="{project_edit_url}"')
+        self.assertNotContains(experience_response, f'href="{experience_edit_url}"')
+
+    def test_edit_button_visible_for_editor_group_member(self):
+        self.client.login(username="editor", password="editorpass123")
+        response = self.client.get(reverse("main:show_project"))
+        edit_url = reverse("main:edit_project", args=[self.project.id])
+
+        self.assertContains(response, f'href="{edit_url}"')
+
+    def test_edit_button_visible_for_superuser(self):
+        self.client.login(username="admin", password="adminpass123")
+        project_response = self.client.get(reverse("main:show_project"))
+        project_edit_url = reverse("main:edit_project", args=[self.project.id])
+        experience_response = self.client.get(reverse("main:show_experience"))
+        experience_edit_url = reverse("main:edit_experience", args=[self.experience.id])
+
+        self.assertContains(project_response, f'href="{project_edit_url}"')
+        self.assertContains(experience_response, f'href="{experience_edit_url}"')
+
+    def test_delete_button_hidden_for_editor_who_is_not_superuser(self):
+        self.client.login(username="editor", password="editorpass123")
+        project_response = self.client.get(reverse("main:show_project"))
+        experience_response = self.client.get(reverse("main:show_experience"))
+
+        self.assertNotContains(project_response, f'delete-project-{self.project.id}')
+        self.assertNotContains(experience_response, f'delete-experience-{self.experience.id}')
+
+    def test_delete_button_visible_for_superuser(self):
+        self.client.login(username="admin", password="adminpass123")
+        response = self.client.get(reverse("main:show_project"))
+
+        self.assertContains(response, f'delete-project-{self.project.id}')
+
+    def test_add_project_and_experience_button_hidden_for_editor_who_is_not_superuser(self):
+        self.client.login(username="editor", password="editorpass123")
+        project_response = self.client.get(reverse("main:show_project"))
+        experience_response = self.client.get(reverse("main:show_experience"))
+
+        self.assertNotContains(project_response, f'href="{reverse("main:create_project")}"')
+        self.assertNotContains(experience_response, f'href="{reverse("main:create_experience")}"')
+
+    def test_add_project_and_experience_button_visible_for_superuser(self):
+        self.client.login(username="admin", password="adminpass123")
+        project_response = self.client.get(reverse("main:show_project"))
+        experience_response = self.client.get(reverse("main:show_experience"))
+
+        self.assertContains(project_response, f'href="{reverse("main:create_project")}"')
+        self.assertContains(experience_response, f'href="{reverse("main:create_experience")}"')

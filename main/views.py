@@ -246,7 +246,7 @@ def register(request):
 
     if request.method == "POST" and form.is_valid():
         form.save()
-        messages.success(request, "Account created successfully. Please log in.")
+        messages.success(request, "Account created successfully. Please log in to continue.")
         return redirect("main:login")
 
     context = {
