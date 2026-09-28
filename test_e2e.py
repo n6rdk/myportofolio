@@ -70,7 +70,7 @@ def main():
         wait.until(EC.visibility_of_element_located((By.CLASS_NAME, "nav-user")))
         assert driver.get_cookie("sessionid")
         assert driver.get_cookie("last_login")
-        assert "Sesi Terakhir Login" in driver.page_source or "Last Login" in driver.page_source
+        assert "$ cat last_login.log" in driver.page_source or "Last Login" in driver.page_source
         print("[PASS] Login user biasa dan cookie sesi berhasil")
 
         # 3. Cek pembatasan akses user biasa ke form tambah proyek
