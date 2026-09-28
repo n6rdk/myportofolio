@@ -15,7 +15,7 @@ def is_editor(user):
     return user.groups.filter(name="Editor").exists()
 
 def show_main(request):
-    last_login = request.COOKIES.get('last_login', 'Belum ada sesi login / Cookie tidak ditemukan')
+    last_login = request.COOKIES.get('last_login', 'No login session yet / Cookie not found')
     print("LAST LOGIN:", repr(last_login))
     
     context = {
@@ -246,7 +246,7 @@ def register(request):
 
     if request.method == "POST" and form.is_valid():
         form.save()
-        messages.success(request, "Akun berhasil dibuat. Silakan login.")
+        messages.success(request, "Account created successfully. Please log in.")
         return redirect("main:login")
 
     context = {

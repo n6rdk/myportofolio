@@ -4,7 +4,7 @@ from main.models import *
 
 
 def show_main(request):
-    last_login = request.COOKIES.get('last_login', 'Belum ada sesi login / Cookie tidak ditemukan')
+    last_login = request.COOKIES.get('last_login', 'No login session yet / Cookie not found')
     context = {
         "first_name": "Nabila",
         "middle_name": "Oktavia",

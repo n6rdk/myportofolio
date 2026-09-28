@@ -71,21 +71,25 @@ myportofolio/
 │   │   ├── command_typing.html
 │   │   ├── experience_delete_modal.html
 │   │   ├── nav_links.html
-│   │   └── project_delete_modal.html
+│   │   ├── project_delete_modal.html
+│   │   └── project_star.html
 │   ├── base_section.html
 │   ├── base.html
 │   ├── experience_form.html
 │   ├── experience.html
 │   ├── index.html
+│   ├── login.html
 │   ├── project.html
 │   ├── project_form.html
+│   ├── register.html
 │   └── skill.html
 ├── .gitignore
 ├── manage.py
 ├── package-lock.json
 ├── package.json
 ├── README.md
-└── requirements.txt
+├── requirements.txt
+└── test_e2e.py
 ```
 
 
@@ -160,25 +164,15 @@ Kemudian buka website melalui alamat development server yang diberikan oleh Djan
 * Menerapkan secret key untuk CRUD pada halaman experience dan project.
 * Membuat hamburger navbar untuk tampilan mobile.
 
+### Week 4
+* Implementasi tutorial 4 (Authentication, Session and Cookies Implementation).
+* Mengimplementasikan hak akses editor, yaitu memiliki hak akses user biasa dan dapat mengedit project.
+* Menyembunyikan tombol `Add Project`, `Add Experience`, delete project, dan delete experience dari user selain superuser.
+* Menyembunyikan tombol edit project dan edit experience dari user selain superuser dan editor.
+
 ---
 
 # Jawaban Pertanyaan Reflektif
-
-## Tugas 3
-
-### 1)
-
-ModelForm membuat form langsung dari model, jadi field, tipe data, dan aturan validasinya (seperti max_length, URLField, dan blank) tidak perlu ditulis ulang. Kita cukup memanggil is_valid() untuk validasi dan save() untuk menyimpan ke database, dan form otomatis ikut menyesuaikan kalau model berubah, sedangkan form HTML manual lebih panjang, rawan tidak sinkron dengan model, dan validasinya mudah terlewat. Adapun `{% csrf_token %}` wajib ada karena browser otomatis menyertakan cookie sesi di setiap request, sehingga situs jahat bisa membuat pengguna yang sedang login mengirim request palsu (serangan CSRF) tanpa disadari. Token acak yang unik ini disisipkan sebagai hidden input dan dicocokkan oleh Django saat POST, sehingga request tanpa token yang valid ditolak dengan error 403.
-
-
-### 2)
-
-Saat ini, JSON lebih disukai dibandingkan XML pada aplikasi modern (terutama pada arsitektur RESTful API) karena ukurannya yang lebih ringkas, parser yang sangat cepat, dan integrasi yang sangat natural dengan JavaScript di sisi frontend. Ini terlihat pada contoh data Burhan di tutorial: XML harus menulis tag pembuka dan penutup untuk setiap elemen (`<name>Burhan</name>`) plus root element wajib dan prolog, sedangkan JSON cukup pasangan key-value (`"name": "Burhan"`). Hasilnya ukuran data lebih kecil, sehingga lebih hemat bandwidth dan lebih cepat dikirim antara backend dan frontend.
-
-
-### 3)
-
-Saat view seperti `get_experience_json` dipanggil, Django akan mengambil data dari database dengan `Experience.objects.all()`, tapi hasilnya bukan JSON, melainkan kumpulan objek model Python yang strukturnya rumit (punya method, relasi, dan tipe field khusus seperti UUIDField) jadi kalau langsung dikirim sebagai response akan error, karena JSON hanya mengerti tipe data sederhana seperti string, number, boolean, dsb. Oleh karena itu, diperlukan proses serialization lewat `serializers.serialize("json", experiences)`, yang mengubah objek-objek model itu jadi string JSON yang bisa dibaca sistem lain, baru setelah itu dibungkus ke HttpResponse dengan `content_type="application/json"` dan dikirim ke klien. Jadi serialization itu penting karena berfungsi sebagai "penerjemah" dari struktur data internal Django ke format universal yang bisa dipahami JavaScript, aplikasi mobile, atau sistem lain di luar Django.
 
 
 ---
@@ -195,6 +189,7 @@ Log penggunaan AI:
 <br>https://share.gemini.google/KMqQVLRNFXIK
 <br>https://claude.ai/share/9fbb6c5f-f5f3-459d-b2de-c9eaabb30696
 <br>https://claude.ai/share/0928bf74-ea00-4a0b-86ba-df0dd40f78a1
+<br>https://claude.ai/share/ace62fc8-5c46-4f80-a725-30572f514ad0
 
 ## Peran AI
 
