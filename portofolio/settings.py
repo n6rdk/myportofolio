@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/6.1/ref/settings/
 
 from pathlib import Path
 import os
+from django.core.exceptions import ImproperlyConfigured
 from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv()
@@ -23,20 +24,27 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
 
+PRODUCTION = os.getenv('PRODUCTION', 'False').lower() == 'true'
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY")
+_DEV_FALLBACK_SECRET_KEY = 'django-insecure-dev-only-key-do-not-use-in-production'
+SECRET_KEY = os.getenv('SECRET_KEY')
+if not SECRET_KEY:
+    if PRODUCTION:
+        raise ImproperlyConfigured(
+            'Environment variable SECRET_KEY wajib di-set saat PRODUCTION=True.'
+        )
+    SECRET_KEY = _DEV_FALLBACK_SECRET_KEY
 
 PORTFOLIO_SECRET_KEY = os.getenv("PORTFOLIO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DJANGO_DEBUG", "False") == "True"
+# DEBUG mati di production, menyala di lokal kecuali di-override.
+DEBUG = os.getenv('DJANGO_DEBUG', str(not PRODUCTION)).lower() == 'true'
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "nabila-oktavia51-myportofolio.pws.cs.ui.ac.id"]
 
 CSRF_TRUSTED_ORIGINS = ["https://nabila-oktavia51-myportofolio.pws.cs.ui.ac.id"]
-
-PRODUCTION = os.getenv('PRODUCTION', 'False').lower() == 'true'
-
 
 # Application definition
 
@@ -71,7 +79,6 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
-                "django.template.context_processors.debug",
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',

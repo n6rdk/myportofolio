@@ -184,6 +184,7 @@ class MainTest(TestCase):
 
     @use_test_secret_key
     def test_create_experience_fails_with_wrong_secret_key(self):
+        self.client.login(username="admin", password="adminpass123")
         response = self.client.post(reverse("main:create_experience"), {
             "title": "New Experience",
             "description": "desc",
@@ -197,6 +198,7 @@ class MainTest(TestCase):
 
     @use_test_secret_key
     def test_create_experience_succeeds_with_correct_secret_key(self):
+        self.client.login(username="admin", password="adminpass123")
         response = self.client.post(reverse("main:create_experience"), {
             "title": "New Experience",
             "description": "desc",
@@ -210,6 +212,7 @@ class MainTest(TestCase):
 
     @use_test_secret_key
     def test_delete_experience_requires_correct_secret_key(self):
+        self.client.login(username="admin", password="adminpass123")
         url = reverse("main:delete_experience", args=[self.experience.id])
 
         self.client.post(url, {"secret_key": "wrongkey"})
@@ -220,6 +223,7 @@ class MainTest(TestCase):
 
     @use_test_secret_key
     def test_delete_project_requires_correct_secret_key(self):
+        self.client.login(username="admin", password="adminpass123")
         url = reverse("main:delete_project", args=[self.project.id])
 
         self.client.post(url, {"secret_key": "wrongkey"})
