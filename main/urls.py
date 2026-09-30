@@ -21,4 +21,6 @@ urlpatterns = [
     path("login/", login_user, name="login"),
     path("logout/", logout_user, name="logout"),
     path("projects/<uuid:project_id>/star/", toggle_star, name="toggle_star"),
+    path("projects/add-ajax/", create_project_ajax, name="create_project_ajax"),
+    path(".well-known/appspecific/com.chrome.devtools.json", devtools_json_view)
 ]
