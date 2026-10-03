@@ -50,7 +50,7 @@
         <button
             type="button"
             class="btn1"
-            popovertarget="experience-secret-modal"
+            popovertarget="experience-confirma-modal"
             popovertargetaction="show">
             {% if experience %}Save Changes{% else %}Add experience{% endif %}
         </button>
@@ -59,13 +59,13 @@
     </form>
 
     <div
-        id="experience-secret-modal"
+        id="experience-confirma-modal"
         class="experience-delete-modal"
         popover>
         <button
             type="button"
             class="experience-delete-modal__backdrop"
-            popovertarget="experience-secret-modal"
+            popovertarget="experience-confirma-modal"
             popovertargetaction="hide"
             aria-label="Close"
         ></button>
@@ -73,32 +73,16 @@
             <button
                 type="button"
                 class="experience-delete-modal__close"
-                popovertarget="experience-secret-modal"
+                popovertarget="experience-confirma-modal"
                 popovertargetaction="hide"
                 aria-label="Close">×</button>
             <h2>{% if experience %}Save changes?{% else %}Add this experience?{% endif %}</h2>
-            <p>
-                {% if experience %}
-                    Enter the secret code to update this experience.
-                {% else %}
-                    Enter the secret code to add a new experience.
-                {% endif %}
-            </p>
-            <div class="form-group mt-2">
-                <input
-                    type="password"
-                    name="secret_key"
-                    id="secret_key"
-                    placeholder="Enter the secret code"
-                    form="experience-form"
-                    required>
-            </div>
 
             <div class="experience-delete-modal__actions">
                 <button
                     type="button"
                     class="btn2"
-                    popovertarget="experience-secret-modal"
+                    popovertarget="experience-confirma-modal"
                     popovertargetaction="hide">
                     Cancel
                 </button>
@@ -107,7 +91,7 @@
                     type="submit"
                     class="btn2 bg-primary"
                     form="experience-form">
-                    {% if experience %}Save changes{% else %}Add experience{% endif %}
+                    {% if experience %}Yes{% else %}Add experience{% endif %}
                 </button>
             </div>
         </div>

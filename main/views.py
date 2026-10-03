@@ -51,14 +51,6 @@ def create_experience(request):
     form = ExperienceForm(request.POST or None)
     
     if request.method == "POST":
-        header_key = request.headers.get("X-Secret-Key")
-        form_key = request.POST.get("secret_key")
-        submitted_key = header_key or form_key
-
-        if submitted_key != settings.PORTFOLIO_SECRET_KEY:
-            messages.error(request, "Incorrect secret code! You do not have access to add experiences.")
-            return redirect("main:create_experience")
-
         if form.is_valid():
             form.save()
             messages.success(request, "New experience successfully added!")
@@ -83,20 +75,8 @@ def delete_experience(request, experience_id):
         raise PermissionDenied
         
     experience = get_object_or_404(Experience, pk=experience_id)
-
-    if request.method == "POST":
-        header_key = request.headers.get("X-Secret-Key")
-        form_key = request.POST.get("secret_key")
-        submitted_key = header_key or form_key
-
-        if submitted_key != settings.PORTFOLIO_SECRET_KEY:
-            messages.error(request, "Incorrect secret code! You do not have access to delete experience.")
-            return redirect("main:show_experience")
-
-        experience.delete()
-        messages.success(request, "Experience successfully deleted!")
-        return redirect("main:show_experience")
-
+    experience.delete()
+    messages.success(request, "Experience successfully deleted!")
     return redirect("main:show_experience")
 
 @login_required(login_url="/login/")
@@ -106,18 +86,11 @@ def edit_experience(request, experience_id):
     
     experience = get_object_or_404(Experience, pk=experience_id)
     form = ExperienceForm(request.POST or None, instance=experience)
-
-    if request.method == "POST":
-        header_key = request.headers.get("X-Secret-Key")
-        form_key = request.POST.get("secret_key")
-        submitted_key = header_key or form_key
-
-        if submitted_key != settings.PORTFOLIO_SECRET_KEY:
-            messages.error(request, "Incorrect secret code! You do not have access to edit experience.")
-        elif form.is_valid():
-            form.save()
-            messages.success(request, "Experience successfully updated!")
-            return redirect("main:show_experience")
+    
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "Experience successfully updated!")
+        return redirect("main:show_experience")
 
     context = {
         "first_name": "Nabila",
@@ -160,14 +133,6 @@ def create_project(request):
     form = ProjectForm(request.POST or None)
 
     if request.method == "POST":
-        header_key = request.headers.get("X-Secret-Key")
-        form_key = request.POST.get("secret_key")
-        submitted_key = header_key or form_key
-
-        if submitted_key != settings.PORTFOLIO_SECRET_KEY:
-            messages.error(request, "Incorrect secret code! You do not have access to add projects.")
-            return redirect("main:create_project")
-
         if form.is_valid():
             form.save()
             messages.success(request, "New project successfully added!")
@@ -217,20 +182,9 @@ def delete_project(request, project_id):
         raise PermissionDenied
         
     project = get_object_or_404(Project, pk=project_id)
-
-    if request.method == "POST":
-        header_key = request.headers.get("X-Secret-Key")
-        form_key = request.POST.get("secret_key")
-        submitted_key = header_key or form_key
-
-        if submitted_key != settings.PORTFOLIO_SECRET_KEY:
-            messages.error(request, "Incorrect secret code! You do not have access to delete the project.")
-            return redirect("main:show_project")
-
-        project.delete()
-        messages.success(request, "Project successfully deleted!")
-        return redirect("main:show_project")
-
+    project.delete()
+    
+    messages.success(request, "Project successfully deleted!")
     return redirect("main:show_project")
 
 @login_required(login_url="/login/")

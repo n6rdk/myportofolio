@@ -36,15 +36,6 @@ if not SECRET_KEY:
         )
     SECRET_KEY = _DEV_FALLBACK_SECRET_KEY
 
-_DEV_FALLBACK_PORTFOLIO_SECRET_KEY = 'dev-only-portfolio-secret-do-not-use-in-production'
-PORTFOLIO_SECRET_KEY = os.getenv('PORTFOLIO_SECRET_KEY')
-if not PORTFOLIO_SECRET_KEY:
-    if PRODUCTION:
-        raise ImproperlyConfigured(
-            'Environment variable PORTFOLIO_SECRET_KEY wajib di-set saat PRODUCTION=True.'
-        )
-    PORTFOLIO_SECRET_KEY = _DEV_FALLBACK_PORTFOLIO_SECRET_KEY
-
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG mati di production, menyala di lokal kecuali di-override.
 DEBUG = os.getenv('DJANGO_DEBUG', str(not PRODUCTION)).lower() == 'true'
