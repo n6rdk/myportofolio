@@ -61,10 +61,16 @@ class ProjectForm(ModelForm):
         return title
 
     def clean_tech_stack(self):
-        return strip_tags(self.cleaned_data["tech_stack"]).strip()
+        tech_stack = strip_tags(self.cleaned_data["tech_stack"]).strip()
+        if not tech_stack:
+            raise ValidationError("Tech stack cannot consist solely of HTML tags.")
+        return tech_stack
 
     def clean_description(self):
-        return strip_tags(self.cleaned_data["description"]).strip()
+        description = strip_tags(self.cleaned_data["description"]).strip()
+        if not description:
+            raise ValidationError("Description cannot consist solely of HTML tags.")
+        return description
 
 
 class ExperienceForm(ModelForm):
