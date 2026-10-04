@@ -101,6 +101,7 @@ def get_experience_json(request):
     return JsonResponse(data, safe=False)
 
 @login_required(login_url="/login/")
+@require_POST
 def delete_experience(request, experience_id):
     if not request.user.is_superuser:
         raise PermissionDenied
@@ -201,6 +202,7 @@ def edit_project(request, project_id):
     return render(request, "project_form.html", context)
 
 @login_required(login_url="/login/")
+@require_POST
 def delete_project(request, project_id):
     if not request.user.is_superuser:
         raise PermissionDenied
