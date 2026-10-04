@@ -34,11 +34,15 @@ def show_main(request):
     return render(request, "index.html", context)
 
 def show_experience(request):
+    category_query = request.GET.get("category", "").strip()
+    
     context = {
         "first_name": "Nabila",
         "middle_name": "Oktavia",
         "last_name": "Ramadhani",
         "experience_list": Experience.objects.all(),
+        "category_query": category_query,
+        "form": ExperienceForm(),
     }
     return render(request, "experience.html", context)
 
@@ -64,9 +68,37 @@ def create_experience(request):
     return render(request, "experience_form.html", context)
 
 def get_experience_json(request):
-    experiences = Experience.objects.all()
-    experiences_json = serializers.serialize("json", experiences)
-    return HttpResponse(experiences_json, content_type="application/json")
+    category_query = request.GET.get("category", "").strip().lower()
+    data = []
+    
+    for experience in Experience.objects.all():
+        category_display = experience.get_category_display()
+        if category_query and category_query not in category_display.lower():
+            continue
+        
+        start, end = experience.started_at, experience.ended_at
+        if start and end:
+            time_display = f"{start} - {end}"
+        elif start:
+            time_display = f"{start} - Present"
+        else:
+            time_display = str(end)
+
+        data.append({
+            "pk": str(experience.id),
+            "fields": {
+                "title": experience.title,
+                "description": experience.description,
+                "category": experience.category,
+                "thumbnail": experience.thumbnail,
+                "started_at": experience.started_at,
+                "ended_at": experience.ended_at,
+                "category_display": category_display,
+                "time_display": time_display,
+            },
+        })
+        
+    return JsonResponse(data, safe=False)
 
 @login_required(login_url="/login/")
 def delete_experience(request, experience_id):
@@ -305,4 +337,47 @@ def edit_project_ajax(request, project_id):
     if form.is_valid():
         form.save()
         return JsonResponse({"message": "Project updated successfully!"})
+    return JsonResponse({"errors": form.errors.get_json_data()}, status=400)
+
+@require_POST
+def create_experience_ajax(request):
+    if not request.user.is_superuser:
+        return JsonResponse(
+            {"message": "Only the portfolio owner can add experiences."},
+            status=403,
+        )
+
+    form = ExperienceForm(request.POST)
+    if form.is_valid():
+        experience = form.save()
+        return JsonResponse(
+            {"message": "New experience successfully added!", "pk": str(experience.id)},
+            status=201,
+        )
+
+    return JsonResponse({"errors": form.errors.get_json_data()}, status=400)
+
+@require_POST
+def delete_experience_ajax(request, experience_id):
+    if not request.user.is_superuser:
+        return JsonResponse(
+            {"message": "Only the portfolio owner can delete experiences."},
+            status=403,
+        )
+
+    experience = get_object_or_404(Experience, pk=experience_id)
+    experience.delete()
+    return JsonResponse({"message": "Experience deleted successfully!"})
+
+@require_POST
+def edit_experience_ajax(request, experience_id):
+    if not request.user.is_superuser:
+        return JsonResponse({"message": "You don't have permission to edit experiences."}, status=403)
+
+    experience = get_object_or_404(Experience, pk=experience_id)
+    form = ExperienceForm(request.POST, instance=experience)
+
+    if form.is_valid():
+        form.save()
+        return JsonResponse({"message": "Experience updated successfully!"})
     return JsonResponse({"errors": form.errors.get_json_data()}, status=400)

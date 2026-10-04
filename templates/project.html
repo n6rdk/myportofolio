@@ -32,7 +32,9 @@
             <iconify-icon icon="lucide:search"></iconify-icon>
         </button>
     </form>
+{% endblock section_actions %}
 
+{% block section_content %}
     <div class="w-full basis-full">
         {% include "components/command_typing.html" with text="$ ls -la ~/projects" %}
     </div>
@@ -51,9 +53,8 @@
     <div id="empty" class="empty-state hide">
         <p>No projects have been added or found yet.</p>
     </div>
-{% endblock section_actions %}
-
-{% block section_content %}
+    
+    <p id="projects-intro">Projects I involved in.</p>
 
     <!-- Empty shell: cards are rendered by JS after the fetch -->
     <div id="grid" class="mt-10 mb-10 experience-grid project-grid"></div>
@@ -67,7 +68,6 @@
             Add Project
         </button>
     </div>
-
     {% endif %}
 
     {% if can_edit %}
@@ -94,15 +94,17 @@
     const searchForm = document.getElementById('project-search-form');
     const searchInput = document.getElementById('search-input');
     const projectForm = document.getElementById('project-form');
+    const introText = document.getElementById('projects-intro');
     const SEARCH_DEBOUNCE_DELAY = 300;
     let searchDebounceTimer;
-
+    
     // Menyembunyikan/Menampilkan section halaman
     function displayPageSection({ showLoading = false, showError = false, showEmpty = false, showGrid = false }) {
         loadingState.classList.toggle('hide', !showLoading);
         errorState.classList.toggle('hide', !showError);
         emptyState.classList.toggle('hide', !showEmpty);
         gridContainer.classList.toggle('hide', !showGrid);
+        introText.classList.toggle('hide', !showGrid);
     }
 
     // Mengubah karakter khusus HTML menjadi entity agar ditampilkan sebagai teks

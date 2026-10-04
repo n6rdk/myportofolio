@@ -393,6 +393,85 @@
         box-shadow: 0 0 0.5rem var(--color-primary);
     }
 
+    /* ---------- Star ---------- */
+    .star-form {
+        display: flex;
+        margin-bottom: 0.75rem;
+    }
+
+    .button-star {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        background: var(--color-accent1);
+    }
+
+    .button-star.is-starred {
+        background: var(--color-primary);
+        color: var(--color-bg);
+    }
+
+    .button-star:hover {
+        transition: all 150ms var(--ease-ui);
+        color: var(--color-bg);
+    }
+
+    .star-count {
+        padding: 0.05rem 0.4rem;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.25);
+        font-size: 0.8rem;
+    }
+    
+    /* ---------- Forms ---------- */
+    .project-form {
+        width: 100%;
+        max-width: 100%;
+        margin-top: 1.5rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.25rem;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 0.4rem;
+        font-weight: 500;
+    }
+
+    .form-group :is(input, textarea, select) {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0.5rem;
+        border: 1px solid var(--color-accent1);
+        border-radius: 1px;
+        font: inherit;
+        transition: border-color 200ms ease;
+    }
+
+    .form-group :is(input, textarea, select):focus {
+        outline: 2px solid var(--color-accent1);
+        border-color: var(--color-accent1);
+        box-shadow: 0 0 0.5rem var(--color-accent1);
+    }
+
+    .form-group select {
+        background-color: var(--color-bg);
+        color: var(--color-ink);
+        cursor: pointer;
+    }
+
+    .form-group select option[value=""] {
+        color: var(--color-muted);
+    }
+
+    .form-error {
+        margin-top: 0.35rem;
+        color: var(--color-danger);
+        font-size: 0.85rem;
+    }
+
     .project-form-modal {
         display: none;
         position: fixed;
@@ -488,85 +567,7 @@
             text-align: center;
         }
     }
-    /* ---------- Star ---------- */
-    .star-form {
-        display: flex;
-        margin-bottom: 0.75rem;
-    }
-
-    .button-star {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
-        background: var(--color-accent1);
-    }
-
-    .button-star.is-starred {
-        background: var(--color-primary);
-        color: var(--color-bg);
-    }
-
-    .button-star:hover {
-        transition: all 150ms var(--ease-ui);
-        color: var(--color-bg);
-    }
-
-    .star-count {
-        padding: 0.05rem 0.4rem;
-        border-radius: 999px;
-        background: rgba(255, 255, 255, 0.25);
-        font-size: 0.8rem;
-    }
     
-    /* ---------- Forms ---------- */
-    .project-form {
-        width: 100%;
-        max-width: 100%;
-        margin-top: 1.5rem;
-    }
-
-    .form-group {
-        margin-bottom: 1.25rem;
-    }
-
-    .form-group label {
-        display: block;
-        margin-bottom: 0.4rem;
-        font-weight: 500;
-    }
-
-    .form-group :is(input, textarea, select) {
-        width: 100%;
-        box-sizing: border-box;
-        padding: 0.5rem;
-        border: 1px solid var(--color-accent1);
-        border-radius: 1px;
-        font: inherit;
-        transition: border-color 200ms ease;
-    }
-
-    .form-group :is(input, textarea, select):focus {
-        outline: 2px solid var(--color-accent1);
-        border-color: var(--color-accent1);
-        box-shadow: 0 0 0.5rem var(--color-accent1);
-    }
-
-    .form-group select {
-        background-color: var(--color-bg);
-        color: var(--color-ink);
-        cursor: pointer;
-    }
-
-    .form-group select option[value=""] {
-        color: var(--color-muted);
-    }
-
-    .form-error {
-        margin-top: 0.35rem;
-        color: var(--color-danger);
-        font-size: 0.85rem;
-    }
-
     /* ---------- Modals ---------- */
     .project-delete-modal,
     .experience-delete-modal {
