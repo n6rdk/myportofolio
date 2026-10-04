@@ -11,7 +11,6 @@ from django.core.exceptions import PermissionDenied
 from django.views.decorators.http import require_POST
 from main.forms import *
 from main.models import *
-from portofolio import settings
 
 def is_editor(user):
     return user.groups.filter(name="Editor").exists()
@@ -146,6 +145,40 @@ def create_project(request):
     }
     return render(request, "project_form.html", context)
 
+@login_required(login_url="/login/")
+def edit_project(request, project_id):
+    if not (is_editor(request.user) or request.user.is_superuser):
+            raise PermissionDenied
+        
+    project = get_object_or_404(Project, pk=project_id)
+    form = ProjectForm(request.POST or None, instance=project)
+
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Project successfully updated!")
+            return redirect("main:show_project")
+
+    context = {
+        "first_name": "Nabila",
+        "middle_name": "Oktavia",
+        "last_name": "Ramadhani",
+        "form": form,
+        "project": project,
+    }
+    return render(request, "project_form.html", context)
+
+@login_required(login_url="/login/")
+def delete_project(request, project_id):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+        
+    project = get_object_or_404(Project, pk=project_id)
+    project.delete()
+    
+    messages.success(request, "Project successfully deleted!")
+    return redirect("main:show_project")
+
 def get_project_json(request):
     title_query = request.GET.get("title", "").strip()
     projects = Project.objects.prefetch_related('starred_by').all()
@@ -175,40 +208,6 @@ def get_project_json(request):
         })
 
     return JsonResponse(data, safe=False)
-
-@login_required(login_url="/login/")
-def delete_project(request, project_id):
-    if not request.user.is_superuser:
-        raise PermissionDenied
-        
-    project = get_object_or_404(Project, pk=project_id)
-    project.delete()
-    
-    messages.success(request, "Project successfully deleted!")
-    return redirect("main:show_project")
-
-@login_required(login_url="/login/")
-def edit_project(request, project_id):
-    if not (is_editor(request.user) or request.user.is_superuser):
-            raise PermissionDenied
-        
-    project = get_object_or_404(Project, pk=project_id)
-    form = ProjectForm(request.POST or None, instance=project)
-
-    if request.method == "POST":
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Project successfully updated!")
-            return redirect("main:show_project")
-
-    context = {
-        "first_name": "Nabila",
-        "middle_name": "Oktavia",
-        "last_name": "Ramadhani",
-        "form": form,
-        "project": project,
-    }
-    return render(request, "project_form.html", context)
 
 def register(request):
     form = UserCreationForm(request.POST or None)
@@ -251,6 +250,7 @@ def logout_user(request):
     return response
 
 @login_required(login_url="/login/")
+@require_POST
 def toggle_star(request, project_id):
     project = get_object_or_404(Project, pk=project_id)
 
@@ -262,11 +262,13 @@ def toggle_star(request, project_id):
 
     return redirect("main:show_project")
 
+# AJAX ver
+
 @require_POST
 def create_project_ajax(request):
     if not request.user.is_superuser:
         return JsonResponse(
-            {"message": "Hanya pemilik portofolio yang dapat menambahkan proyek."},
+            {"message": "Only the portfolio owner can add projects."},
             status=403,
         )
 
@@ -274,11 +276,33 @@ def create_project_ajax(request):
     if form.is_valid():
         project = form.save()
         return JsonResponse(
-            {"message": "Proyek berhasil ditambahkan.", "pk": str(project.id)},
+            {"message": "New project successfully added!", "pk": str(project.id)},
             status=201,
         )
 
     return JsonResponse({"errors": form.errors.get_json_data()}, status=400)
 
-def devtools_json_view():
-    return JsonResponse({})
+@require_POST
+def delete_project_ajax(request, project_id):
+    if not request.user.is_superuser:
+        return JsonResponse(
+            {"message": "Only the portfolio owner can delete projects."},
+            status=403,
+        )
+
+    project = get_object_or_404(Project, pk=project_id)
+    project.delete()
+    return JsonResponse({"message": "Project deleted successfully!"})
+
+@require_POST
+def edit_project_ajax(request, project_id):
+    if not (request.user.is_superuser or is_editor(request.user)):
+        return JsonResponse({"message": "You don't have permission to edit projects."}, status=403)
+
+    project = get_object_or_404(Project, pk=project_id)
+    form = ProjectForm(request.POST, instance=project)
+
+    if form.is_valid():
+        form.save()
+        return JsonResponse({"message": "Project updated successfully!"})
+    return JsonResponse({"errors": form.errors.get_json_data()}, status=400)

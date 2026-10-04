@@ -112,6 +112,23 @@
         background: var(--color-danger);
     }
 
+    .btn2-star {
+        background: transparent;
+        border: 1px solid var(--color-muted);
+        color: var(--color-muted);
+    }
+
+    .btn2-star:hover {
+        background: transparent;
+        border: 1px solid var(--color-primary);
+        color: var(--color-primary);
+    }
+
+    .btn2-star.is-starred {
+        background: var(--color-primary);
+        color: var(--color-bg);
+    }
+
     .btn1:active,
     .btn2:active {
         filter: brightness(0.9);
@@ -319,10 +336,8 @@
     }
 
     .project-card-delete {
-        position: absolute;
-        top: 0.25rem;
-        right: 1.1rem;
-        z-index: 1;
+        display: flex;
+        margin-left: auto;
         padding: 0;
         background: transparent;
         border: 0;
@@ -475,7 +490,8 @@
     }
     /* ---------- Star ---------- */
     .star-form {
-        display: inline;
+        display: flex;
+        margin-bottom: 0.75rem;
     }
 
     .button-star {
