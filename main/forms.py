@@ -57,7 +57,7 @@ class ProjectForm(ModelForm):
     def clean_title(self):
         title = strip_tags(self.cleaned_data["title"]).strip()
         if not title:
-            raise ValidationError("Nama proyek tidak boleh hanya berisi tag HTML.")
+            raise ValidationError("Project name cannot consist solely of HTML tags.")
         return title
 
     def clean_tech_stack(self):
@@ -124,6 +124,18 @@ class ExperienceForm(ModelForm):
             Experience.EXPERIENCE_CHOICES
         )
 
+    def clean_title(self):
+        title = strip_tags(self.cleaned_data["title"]).strip()
+        if not title:
+            raise ValidationError("Experience name cannot consist solely of HTML tags.")
+        return title
+    
+    def clean_description(self):
+        description = strip_tags(self.cleaned_data["description"]).strip()
+        if not description:
+            raise ValidationError("Description cannot consist solely of HTML tags.")
+        return description
+    
     def clean(self):
         cleaned = super().clean()
         start = cleaned.get("started_at")
