@@ -64,15 +64,18 @@ myportofolio/
 │   ├── css/
 │   │   ├── input.css
 │   │   └── style.css
-│   └── img/
-│       └── self.png
+│   ├── img/
+│   │   └── self.png
+│   └── js/
+│       └── toast.js
 ├── templates/
 │   ├── components/
 │   │   ├── command_typing.html
-│   │   ├── experience_delete_modal.html
+│   │   ├── experience_form_modal.html
 │   │   ├── nav_links.html
-│   │   ├── project_delete_modal.html
-│   │   └── project_star.html
+│   │   ├── project_form_modal.html
+│   │   ├── project_star.html
+│   │   └── toast.html
 │   ├── base_section.html
 │   ├── base.html
 │   ├── experience_form.html
@@ -170,11 +173,25 @@ Kemudian buka website melalui alamat development server yang diberikan oleh Djan
 * Menyembunyikan tombol `Add Project`, `Add Experience`, delete project, dan delete experience dari user selain superuser.
 * Menyembunyikan tombol edit project dan edit experience dari user selain superuser dan editor.
 
+### Week 5
+* Implementasi tutorial 5 (Web Interactivity with JavaScript).
+* Menghapus secret key untuk aktivitas CRUD.
+* Mengubah pengambilan data pada halaman experience dari Django template menjadi AJAX.
+* Mengimplementasikan operasi tambah, edit, dan hapus experience menggunakan AJAX.
 ---
 
 # Jawaban Pertanyaan Reflektif
 
+## Tugas 5
 
+### 1)
+Debouncing adalah teknik yang menunda eksekusi suatu fungsi hingga pengguna berhenti memicu event dalam jangka waktu tertentu, sehingga fungsi hanya dijalankan sekali setelah jeda tersebut. Pada fitur pencarian berbasis AJAX, teknik ini penting karena tanpa debouncing setiap ketikan akan mengirim satu request ke server sehingga menimbulkan banyak permintaan yang tidak diperlukan. Dengan adanya debouncing, request hanya dikirim setelah pengguna selesai mengetik sehingga beban server berkurang dan tampilan website tidak dirender berulang kali.
+
+### 2)
+`await` pada `fetch()` berfungsi untuk menjeda eksekusi fungsi `async` sampai permintaan ke server selesai, lalu mengambil objek Response yang ada di dalam Promise yang dikembalikan `fetch()`. Dengan begitu, kode setelahnya seperti pengecekan `response.ok` baru dijalankan ketika data benar-benar sudah tersedia. Jika `await` tidak digunakan, eksekusi tidak menunggu permintaan selesai sehingga kode berikutnya berjalan lebih dulu, variabel hanya berisi Promise yang masih pending, dan pemanggilan seperti `response.json()` akan menimbulkan error karena data yang dibutuhkan belum ada. Selain itu, error dari `fetch()` juga tidak akan tertangkap oleh blok `try...catch`.
+
+### 3)
+XSS (Cross-Site Scripting) adalah serangan yang menyisipkan kode JavaScript berbahaya ke dalam halaman tepercaya sehingga dieksekusi di browser pengguna lain, misalnya untuk mencuri sesi login atau mengalihkan ke situs berbahaya. Data yang ditampilkan melalui AJAX/JavaScript lebih rentan dibandingkan template Django karena template Django secara otomatis meng-escape setiap variabel {{ }} sehingga karakter seperti < dan > tampil sebagai teks biasa, sedangkan JavaScript tidak memiliki perlindungan serupa.
 ---
 
 # AI Disclosure
@@ -190,6 +207,7 @@ Log penggunaan AI:
 <br>https://claude.ai/share/9fbb6c5f-f5f3-459d-b2de-c9eaabb30696
 <br>https://claude.ai/share/0928bf74-ea00-4a0b-86ba-df0dd40f78a1
 <br>https://claude.ai/share/ace62fc8-5c46-4f80-a725-30572f514ad0
+<br>https://claude.ai/share/478ef425-fbd0-4721-a855-8d9511479019
 
 ## Peran AI
 
@@ -205,16 +223,17 @@ Beberapa hal yang dibantu oleh AI meliputi:
 * Membantu debugging error yang berkaitan dengan database.
 * Membantu memahami dan membuat model dengan field bertipe data array.
 * Membantu memahami konsep-konsep yang ada di pertanyaan reflektif.
+* Membantu memahami implementasi AJAX.
 * Membuat sebagian unit test.
 
 ## Keterbatasan AI
 
-Output AI tidak selalu dapat langsung digunakan karena AI dapat menghasilkan kode yang secara sintaks terlihat benar tetapi belum tentu sesuai dengan desain, experience, atau responsivitas yang diinginkan.
+Output AI tidak selalu dapat langsung digunakan karena AI dapat menghasilkan kode yang secara sintaks terlihat benar tetapi belum tentu sesuai dengan desain, experience, responsivitas, atau alur eksekusi yang diinginkan.
 
 
 ## Manual Improvements
 
-Karena keterbatasan tersebut, setiap output AI tetap dievaluasi dan disesuaikan secara manual. Beberapa penyesuaian yang dilakukan meliputi penyesuaian margin, padding, warna, dan layout grid.
+Karena keterbatasan tersebut, setiap output AI tetap dievaluasi dan disesuaikan secara manual. Beberapa penyesuaian yang dilakukan meliputi penyesuaian margin, padding, warna, dan layout grid. Selain itu, beberapa bagian logika juga disesuaikan agar sesuai dengan alur kerja aplikasi, seperti cara data ditampilkan dan diproses, setelah ditemukan bahwa saran AI tidak selalu cocok dengan arsitektur yang digunakan.
 
 ---
 
