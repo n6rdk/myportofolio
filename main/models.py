@@ -33,6 +33,7 @@ class Experience(models.Model):
         return self.started_at is None
     
 class Skill(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     field = models.CharField(max_length=128)
     icon = models.CharField(max_length=64, blank=True, default='lucide:code')
     tech_stack = models.JSONField(blank=True, default=list)
