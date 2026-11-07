@@ -117,7 +117,9 @@ class PageTest(BaseTestCase):
         self.assertTemplateUsed(response, "skill.html")
         self.assertNotContains(response, self.experience.title)
         self.assertNotContains(response, self.education.major)
-        self.assertContains(response, self.skill.field)
+        self.assertNotContains(response, self.skill.field)
+        skill_api_url = reverse("api:skill-list")
+        self.assertContains(response, f'const SKILLS_ENDPOINT = "{skill_api_url}";')
 
     def test_nonexistent_page_returns_404(self):
         response = self.client.get("/halaman-yang-tidak-ada/")

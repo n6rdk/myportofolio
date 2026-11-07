@@ -5,7 +5,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient, APITestCase
 
-from main.models import Project
+from main.models import Project, Skill
 
 
 class ProjectAPITest(APITestCase):
@@ -117,6 +117,13 @@ class ProjectAPITest(APITestCase):
         editor_group = Group.objects.create(name="Editor")
         self.visitor.groups.add(editor_group)
         self.client.force_authenticate(user=self.visitor)
+        response = self.client.post(self.list_url, self.payload, format="json")
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(self.client.delete(self.detail_url).status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(Project.objects.count(), 1)
+        self.project.refresh_from_db()
+        self.assertEqual(self.project.title, "Portfolio")
+
         response = self.client.patch(self.detail_url, {"title": "Editor update"}, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.project.refresh_from_db()
@@ -144,3 +151,46 @@ class ProjectAPITest(APITestCase):
             self.list_url, self.payload, format="json", HTTP_X_CSRFTOKEN=token,
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+
+class SkillAPITest(APITestCase):
+    def setUp(self):
+        self.owner = User.objects.create_superuser(
+            username="skill-owner", password="test-password", email="skill-owner@example.com",
+        )
+        self.visitor = User.objects.create_user(username="skill-visitor", password="test-password")
+        self.skill = Skill.objects.create(
+            field="Languages", icon="lucide:code", tech_stack=["Python", "SQL"],
+        )
+        self.url = reverse("api:skill-list")
+        self.payload = {
+            "field": "Backend",
+            "icon": "lucide:server",
+            "tech_stack": ["Python", "Django"],
+        }
+
+    def test_public_list_and_owner_create(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data[0]["field"], self.skill.field)
+        self.assertEqual(response.data[0]["tech_stack"], self.skill.tech_stack)
+
+        self.client.force_authenticate(user=self.owner)
+        response = self.client.post(self.url, self.payload, format="json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertTrue(Skill.objects.filter(pk=response.data["id"]).exists())
+
+    def test_visitor_cannot_create_and_invalid_data_is_rejected(self):
+        self.client.force_authenticate(user=self.visitor)
+        response = self.client.post(self.url, self.payload, format="json")
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(Skill.objects.count(), 1)
+
+        self.client.force_authenticate(user=self.owner)
+        response = self.client.post(
+            self.url,
+            {**self.payload, "tech_stack": "Python, Django"},
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Skill.objects.count(), 1)

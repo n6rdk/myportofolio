@@ -1,0 +1,49 @@
+<div id="add-skill-modal"
+     class="project-form-modal"
+     popover="auto"
+     role="dialog"
+     aria-modal="true"
+     aria-labelledby="add-skill-modal-title">
+    <button type="button"
+            class="project-form-modal__backdrop"
+            popovertarget="add-skill-modal"
+            popovertargetaction="hide"
+            aria-label="Close the add skill form"></button>
+
+    <div class="project-form-modal__content">
+        <button type="button"
+                class="project-form-modal__close"
+                popovertarget="add-skill-modal"
+                popovertargetaction="hide"
+                aria-label="Close the add skill form">×</button>
+
+        <h2 id="add-skill-modal-title">Add New Skill</h2>
+        <form id="skill-form"
+              method="post"
+              action="{% url 'api:skill-list' %}"
+              class="project-form">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="skill-field">Skill category</label>
+                <input id="skill-field" name="field" type="text" maxlength="128"
+                       placeholder="e.g. Backend" required>
+            </div>
+            <div class="form-group">
+                <label for="skill-icon">Iconify icon</label>
+                <input id="skill-icon" name="icon" type="text" maxlength="64" placeholder="lucide:code">
+            </div>
+            <div class="form-group">
+                <label for="skill-tech-stack">Technologies (comma-separated)</label>
+                <textarea id="skill-tech-stack" name="tech_stack" rows="3" required
+                          placeholder="Python, Django, PostgreSQL"></textarea>
+            </div>
+            <div class="project-form-modal__actions">
+                <button type="button"
+                        class="btn1 btn1-accent1"
+                        popovertarget="add-skill-modal"
+                        popovertargetaction="hide">Cancel</button>
+                <button type="submit" class="btn1">Add Skill</button>
+            </div>
+        </form>
+    </div>
+</div>
