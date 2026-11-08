@@ -89,7 +89,10 @@ class SkillSerializer(serializers.ModelSerializer):
         if not value:
             raise serializers.ValidationError("Field cannot be empty.")
         return value
-        
+    
+    def validate_icon(self, value):
+        return strip_tags(value).strip()
+  
     def validate_tech_stack(self, value):
         if not isinstance(value, list):
             raise serializers.ValidationError("Tech stack must be a list of strings.")
