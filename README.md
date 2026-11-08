@@ -184,6 +184,10 @@ Kemudian buka website melalui alamat development server yang diberikan oleh Djan
 * Menghapus secret key untuk aktivitas CRUD.
 * Mengubah pengambilan data pada halaman experience dari Django template menjadi AJAX.
 * Mengimplementasikan operasi tambah, edit, dan hapus experience menggunakan AJAX.
+
+### Week 6
+* Implementasi tutorial 7 (Django REST Framework)
+* Implementasi DRF pada halaman experience dan skill.
 ---
 
 # Jawaban Pertanyaan Reflektif
